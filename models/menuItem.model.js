@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const menuItemSchema = mongoose.model({
+const menuItemSchema = mongoose.Schema({
     itemId: String,
     name: String,
     price: Number,

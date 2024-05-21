@@ -6,7 +6,7 @@ const app = express();
 
 const mongoose = require('mongoose');
 
-const ordermanagement = require('./routers//Adminrouters/ordermanagement.routers')
+const ordermanagement = require('./routers/Adminrouters/ordermanagement.routers')
 const restaurantManagementRouter = require('./routers/Adminrouters/restaurantmanagement.routers')
 const menuManagementRouter = require('./routers/Adminrouters/menumanagement.routers')
 

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const restaurantSchema = mongoose.model({
+const restaurantSchema = mongoose.Schema({
     restaurantId: String,
     name: String,
     address: String,
