@@ -5,6 +5,7 @@ const menuManagementRouter = express.Router()
 
 menuManagementRouter.post('/', async (req, res) => {
     const { itemId, name, price, description, restaurantId } = req.body;
+    // console.log(req.body)
     const menuItem = await menuItemModel.create({ itemId, name, price, description, restaurantId })
     res.status(200).json(menuItem)
 })
