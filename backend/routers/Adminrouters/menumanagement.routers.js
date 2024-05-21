@@ -1,5 +1,5 @@
 const express = require('express')
-const menuItemModel = require('../../backend/models/menuItem.model')
+const menuItemModel = require('../../models/menuItem.model')
 
 const menuManagementRouter = express.Router()
 

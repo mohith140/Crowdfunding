@@ -1,5 +1,5 @@
 const express = require('express')
-const userModel = require('../../backend/models/user.model')
+const userModel = require('../../models/user.model')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
@@ -54,10 +54,10 @@ router.post('/login', (req, res) => {
 })
 
 router.post('/signup', (req, res) => {
-    const { username, email, password, role } = req.body;
+    const { username, email, password, role, mobileNumber } = req.body;
     bcrypt.hash(password, 10)
         .then(hash => {
-            userModel.create({ username, email, password: hash, role })
+            userModel.create({ username, email, password: hash, role, mobileNumber })
                 .then(user => res.json("Success"))
                 .catch(err => res.json(err))
         }).catch(err => res.json(err))

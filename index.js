@@ -6,13 +6,13 @@ const app = express();
 
 const mongoose = require('mongoose');
 
-const ordermanagement = require('./routers/Adminrouters/ordermanagement.routers')
-const restaurantManagementRouter = require('./routers/Adminrouters/restaurantmanagement.routers')
-const menuManagementRouter = require('./routers/Adminrouters/menumanagement.routers')
+const ordermanagement = require('./backend/routers/Adminrouters/ordermanagement.routers')
+const restaurantManagementRouter = require('./backend/routers/Adminrouters/restaurantmanagement.routers')
+const menuManagementRouter = require('./backend/routers/Adminrouters/menumanagement.routers')
 
-const ordermanagementUserRouter = require('./routers/Userrouters/ordermanagement.routers')
-const restaurantmanagementUserRouter = require('./routers/Userrouters/restaurantmanagement.routers')
-const userauthentication = require('./routers/Userrouters/userauthentication.routers')
+const ordermanagementUserRouter = require('./backend/routers/Userrouters/ordermanagement.routers')
+const restaurantmanagementUserRouter = require('./backend/routers/Userrouters/restaurantmanagement.routers')
+const userauthentication = require('./backend/routers/Userrouters/userauthentication.routers')
 
 
 mongoose.connect("mongodb+srv://mohith1:mohith1@cluster0.knbt1jb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")

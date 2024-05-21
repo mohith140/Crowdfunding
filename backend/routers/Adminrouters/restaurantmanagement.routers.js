@@ -4,7 +4,7 @@ app.use(express.json())
 
 const restaurantManagementRouter = express.Router()
 
-const restaurantModel = require('../../backend/models/restaurant.model');
+const restaurantModel = require('../../models/restaurant.model');
 
 restaurantManagementRouter.post('/', async (req, res) => {
     const { restaurantId, name, address, phone, menu } = req.body;
