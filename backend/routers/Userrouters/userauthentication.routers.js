@@ -17,7 +17,7 @@ router.use(cookieParser())
 router.use(express.json())
 
 const varifyUser = (req, res, next) => {
-    const token = res.cookies.token;
+    const token = localStorage.getItem('token');
     console.log(token);
     if (!token) {
         return res.status(404).json("Token is missing")
