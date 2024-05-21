@@ -1,6 +1,6 @@
 const express = require('express')
-const restaurantModel = require('../../models/restaurant.model')
-const menuItemModel = require('../../models/menuItem.model')
+const restaurantModel = require('../../backend/models/restaurant.model')
+const menuItemModel = require('../../backend/models/menuItem.model')
 
 const router = express.Router()
 
