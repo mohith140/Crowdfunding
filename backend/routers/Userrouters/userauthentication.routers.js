@@ -4,8 +4,16 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 const cors = require("cors")
+const session = require('express-session')
 
 const router = express.Router()
+
+router.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true
+}));
+
 
 router.use(cors({
     origin: ["http://localhost:3000"],
@@ -52,7 +60,11 @@ router.post('/login', async (req, res) => {
                             "jwt-secret-key", { expiresIn: '1d' })
 
                         res.cookie('token', token)
-                        return res.status(200).json({ Status: "Success", role: user.role, token })
+                        console.log(user._id)
+                        req.session.cookie.path = user._id
+                        // req.session.userId = user._id
+                        // console.log(req.session.cookie)
+                        return res.status(200).json({ Status: "Success", id: user._id, token })
                     } else {
                         return res.status(500).json("The password is incorrect")
                     }
@@ -71,6 +83,13 @@ router.post('/signup', (req, res) => {
                 .then(user => res.json(true))
                 .catch(err => res.json(err))
         }).catch(err => res.json(err))
+})
+
+router.get('/user', async (req, res) => {
+    // console.log(localStorage)
+    const user = await userModel.find({});
+    // res.json(user)
+    console.log(user)
 })
 
 module.exports = router

@@ -24,7 +24,8 @@ function Login() {
 
             const result = await response.json();
             console.log(result);
-            localStorage.setItem("token", result.token);
+            localStorage.setItem('token', result.token)
+            localStorage.setItem("id", result.id);
             if (response.status === 200) {
                 // await fetch('http://localhost:5000/api/dashboard')
                 //     .then(respo => {
