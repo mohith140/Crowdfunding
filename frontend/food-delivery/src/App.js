@@ -1,7 +1,7 @@
 import React from 'react';
 import Dashboard from './Components/AdminDashboard';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './Components/styles.css';
+import './Components/CSS/styles.css';
 
 // const App = () => {
 //   return (

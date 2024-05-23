@@ -1,6 +1,5 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles.css';
 import { useNavigate, Link } from 'react-router-dom';
 
 const AdminDashboard = () => {

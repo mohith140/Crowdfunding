@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './RestaurantList.css'
+import './CSS/RestaurantList.css'
 import { useParams } from 'react-router-dom';
 
 const RestaurantMenu = () => {
@@ -115,9 +115,9 @@ const RestaurantMenu = () => {
                 <input id="desc" className='form-control' type="text" placeholder="Enter Item Description" />
                 {
                     edit ?
-                        <button onClick={() => handleMenuUpdate(id)}>Edit Menu</button>
+                        <button onClick={() => handleMenuUpdate(id)}>Edit Item</button>
                         :
-                        <button onClick={() => handleAdd()}>Add Menu</button>
+                        <button onClick={() => handleAdd()}>Add Item</button>
                 }
             </form>
             <br />
