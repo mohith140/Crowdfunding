@@ -85,9 +85,9 @@ router.post('/signup', (req, res) => {
         }).catch(err => res.json(err))
 })
 
-router.get('/user', async (req, res) => {
+router.get('/user/:id', async (req, res) => {
     // console.log(localStorage)
-    const user = await userModel.find({});
+    const user = await userModel.findOne({});
     // res.json(user)
     console.log(user)
 })

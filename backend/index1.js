@@ -1,8 +1,10 @@
 require('dotenv').config();
 const port = process.env.PORT;
+const cors = require('cors')
 
 const express = require('express');
 const app = express();
+app.use(cors())
 
 const mongoose = require('mongoose');
 
@@ -31,7 +33,7 @@ app.use('/api/restaurants', restaurantmanagementUserRouter)
 //Admin Endpoints
 app.use('/api/admin/orders', ordermanagement);
 app.use('/api/admin/restaurants', restaurantManagementRouter);
-app.use('/api/admin/restaurants/:id/menu', menuManagementRouter);
+app.use('/api/admin/restaurants', menuManagementRouter);
 
 
 
