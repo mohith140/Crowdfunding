@@ -1,0 +1,66 @@
+/* Orders.css */
+
+.orders-container {
+    background-color: #f8f9fc;
+    padding: 20px;
+}
+
+.orders-heading {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4e73df;
+    margin-bottom: 20px;
+}
+
+.order-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    background-color: #ffffff;
+}
+
+.order-card-header {
+    background-color: #f8f9fc;
+    border-bottom: 1px solid #e3e6f0;
+    border-radius: 10px 10px 0 0;
+    padding: 1rem 1.5rem;
+}
+
+.order-card-body {
+    padding: 1.5rem;
+}
+
+.order-details {
+    font-size: 1rem;
+    color: #5a5c69;
+}
+
+.order-actions {
+    text-align: right;
+}
+
+.order-actions button {
+    margin-left: 10px;
+}
+
+.status-badge {
+    padding: 0.5em 1em;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.status-pending {
+    background-color: #f6c23e;
+    color: white;
+}
+
+.status-completed {
+    background-color: #1cc88a;
+    color: white;
+}
+
+.status-cancelled {
+    background-color: #e74a3b;
+    color: white;
+}

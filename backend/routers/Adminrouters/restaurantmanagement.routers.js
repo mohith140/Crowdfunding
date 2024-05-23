@@ -23,4 +23,10 @@ restaurantManagementRouter.delete('/:id', async (req, res) => {
     res.json("Success")
 })
 
+restaurantManagementRouter.get('/:id', async (req, res) => {
+    const restaurant = await restaurantModel.findOne({ restaurantId: req.params.id })
+    res.status(200).json(restaurant)
+    // console.log(restaurant)
+})
+
 module.exports = restaurantManagementRouter

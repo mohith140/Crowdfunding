@@ -1,6 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate, Link } from 'react-router-dom';
+import './CSS/AdminDashboard.css';
 
 const AdminDashboard = () => {
     return (
@@ -11,42 +12,25 @@ const AdminDashboard = () => {
                     <h3 className="text-center mb-4">Admin Dashboard</h3>
                     <ul className="nav flex-column">
                         <li className="nav-item mb-2">
-                            <a href="/" className="nav-link text-white">Dashboard</a>
+                            <Link to="/" className="nav-link text-white">Dashboard</Link>
                         </li>
                         <li className="nav-item mb-2">
                             <Link to="/orders" className="nav-link text-white">Orders</Link>
                         </li>
                         <li className="nav-item mb-2">
-                            <a href="/restaurants" className="nav-link text-white">Restaurants</a>
+                            <Link to="/restaurants" className="nav-link text-white">Restaurants</Link>
                         </li>
                         <li className="nav-item mb-2">
-                            <a href="/customers" className="nav-link text-white">Customers</a>
+                            <Link to="/customers" className="nav-link text-white">Customers</Link>
                         </li>
                         <li className="nav-item mb-2">
-                            <a href="/settings" className="nav-link text-white">Settings</a>
+                            <Link to="/settings" className="nav-link text-white">Settings</Link>
                         </li>
                     </ul>
                 </div>
 
                 {/* Content Wrapper */}
                 <div id="content-wrapper" className="flex-grow-1 d-flex flex-column">
-                    {/* Topbar */}
-                    {/* <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 shadow">
-                        <button className="btn btn-link d-md-none rounded-circle mr-3">
-                            <i className="fa fa-bars"></i>
-                        </button>
-                        <ul className="navbar-nav ml-auto">
-                            <li className="nav-item dropdown no-arrow">
-                                <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span className="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
-                                    <img className="img-profile rounded-circle"
-                                        src="https://source.unsplash.com/QAB-WJcbgJk/60x60" alt="Profile" />
-                                </a>
-                            </li>
-                        </ul>
-                    </nav> */}
-
                     {/* Main Content */}
                     <div className="container-fluid">
                         <div className="d-sm-flex align-items-center justify-content-between mb-4">
@@ -61,7 +45,8 @@ const AdminDashboard = () => {
                                         <div className="row no-gutters align-items-center">
                                             <div className="col mr-2">
                                                 <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                    Earnings (Monthly)</div>
+                                                    Earnings (Monthly)
+                                                </div>
                                                 <div className="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
                                             </div>
                                             <div className="col-auto">
@@ -79,7 +64,8 @@ const AdminDashboard = () => {
                                         <div className="row no-gutters align-items-center">
                                             <div className="col mr-2">
                                                 <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                    Earnings (Annual)</div>
+                                                    Earnings (Annual)
+                                                </div>
                                                 <div className="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
                                             </div>
                                             <div className="col-auto">
@@ -97,7 +83,8 @@ const AdminDashboard = () => {
                                         <div className="row no-gutters align-items-center">
                                             <div className="col mr-2">
                                                 <div className="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                    New Orders</div>
+                                                    New Orders
+                                                </div>
                                                 <div className="h5 mb-0 font-weight-bold text-gray-800">124</div>
                                             </div>
                                             <div className="col-auto">
@@ -115,7 +102,8 @@ const AdminDashboard = () => {
                                         <div className="row no-gutters align-items-center">
                                             <div className="col mr-2">
                                                 <div className="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                    Pending Requests</div>
+                                                    Pending Requests
+                                                </div>
                                                 <div className="h5 mb-0 font-weight-bold text-gray-800">18</div>
                                             </div>
                                             <div className="col-auto">

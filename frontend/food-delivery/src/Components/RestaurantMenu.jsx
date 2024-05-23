@@ -1,124 +1,125 @@
 import React, { useState, useEffect } from 'react';
-import './CSS/RestaurantList.css'
-import { useParams } from 'react-router-dom';
+import './CSS/RestaurantList.css';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const RestaurantMenu = () => {
     const [edit, setEdit] = useState(false);
     const [menus, setMenus] = useState([]);
-    const [id, setId] = useState();
+    const [currentMenuId, setCurrentMenuId] = useState(null);
+    const [name, setName] = useState('');
 
     const params = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchMenus();
+        fetchName();
     }, []);
+
+    const fetchName = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/admin/restaurants/${params.id}`);
+            const data = await response.json();
+            setName(data.name);
+        } catch (err) {
+            console.log(err.message);
+        }
+    }
 
     const fetchMenus = async () => {
         try {
             const response = await fetch(`http://localhost:5000/api/restaurants/${params.id}/menu`);
             const data = await response.json();
-            console.log(data)
             setMenus(data);
         } catch (error) {
-            console.error('Error fetching restaurants:', error);
+            console.error('Error fetching menus:', error);
         }
     };
 
-    const handleMenuUpdate = async (e, id1) => {
-        var name = document.getElementById('name').value
-        var price = document.getElementById('price').value
-        var description = document.getElementById('desc').value
+    const handleMenuSubmit = async (event) => {
+        event.preventDefault();
+        const name = document.getElementById('name').value;
+        const price = document.getElementById('price').value;
+        const description = document.getElementById('desc').value;
 
-        // Check if the form is in edit mode
+        const menuData = { name, price, description };
+
         if (edit) {
-            // Update existing restaurant data
             try {
-                var data = { name, price, description };
-                console.log(data)
-                await fetch(`http://localhost:5000/api/admin/restaurants/${params.id}/menu/${id1}`, {
+                await fetch(`http://localhost:5000/api/admin/restaurants/${params.id}/menu/${currentMenuId}`, {
                     method: 'PUT',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(menuData),
                 });
             } catch (err) {
-                console.log('Error updating restaurant:', err);
+                console.log('Error updating menu:', err);
             }
         } else {
-            // Add new restaurant
-            const restaurantId = document.getElementById('id').value;
-            const data = { restaurantId, name, price, description };
+            const itemId = document.getElementById('id').value;
+            menuData.itemId = itemId;
+            menuData.restaurantId = params.id;
             try {
                 await fetch(`http://localhost:5000/api/admin/restaurants/${params.id}/menu`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(menuData),
                 });
             } catch (err) {
-                console.log('Error adding new restaurant:', err);
+                console.log('Error adding new menu:', err);
             }
         }
 
-        // Reset edit mode and clear input fields
-        setEdit(false);
-        setId(null);
-        document.getElementById('name').value = '';
-        document.getElementById('price').value = '';
-        document.getElementById('desc').value = '';
+        resetForm();
+        fetchMenus();
     };
 
     const handleDelete = async (id) => {
-        await fetch(`http://localhost:5000/api/admin/restaurants/${params.id}/menu/${id}`, {
-            method: 'DELETE'
-        })
-        setMenus(menus.filter((menu) => menu.id !== id));
-    }
+        try {
+            await fetch(`http://localhost:5000/api/admin/restaurants/${params.id}/menu/${id}`, {
+                method: 'DELETE',
+            });
+            setMenus(menus.filter((menu) => menu.itemId !== id));
+        } catch (err) {
+            console.error('Error deleting menu:', err);
+        }
+    };
 
-    const handleAdd = async () => {
-        var itemId = document.getElementById('id').value
-        var name = document.getElementById('name').value
-        var price = document.getElementById('price').value
-        var description = document.getElementById('desc').value
+    const resetForm = () => {
+        setEdit(false);
+        setCurrentMenuId(null);
+        document.getElementById('menuForm').reset();
+    };
 
-        var data = { itemId, name, price, description, restaurantId: params.id }
+    const editButton = (id) => {
+        const menu = menus.find((menu) => menu.itemId === id);
+        document.getElementById('name').value = menu.name;
+        document.getElementById('price').value = menu.price;
+        document.getElementById('desc').value = menu.description;
 
-        await fetch(`http://localhost:5000/api/admin/restaurants/${params.id}/menu`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-    }
-
-    const editButton = async (id) => {
-        console.log(id)
         setEdit(true);
-        setId(id);
-    }
+        setCurrentMenuId(id);
+    };
+
+    const goBack = () => {
+        navigate(-1);
+    };
 
     return (
         <div className="restaurant-list-container">
-            <h2 className="restaurant-list-heading">Menu List</h2>
-            <form id="restaurantForm">
-                {
-                    edit ?
-                        <></>
-                        :
-                        <input id="id" className='form-control' type=" text" placeholder="Enter Menu ID" />
-                }
-                <input id="name" className='form-control' type="text" placeholder="Enter Item Name" />
-                <input id="price" className='form-control' type="text" placeholder="Enter Item Price" />
-                <input id="desc" className='form-control' type="text" placeholder="Enter Item Description" />
-                {
-                    edit ?
-                        <button onClick={() => handleMenuUpdate(id)}>Edit Item</button>
-                        :
-                        <button onClick={() => handleAdd()}>Add Item</button>
-                }
+            <h2 className="restaurant-list-heading">{name}'s Menu List</h2>
+            <form id="menuForm" onSubmit={handleMenuSubmit}>
+                {!edit && <input id="id" className="form-control" type="text" placeholder="Enter Menu ID" />}
+                <input id="name" className="form-control" type="text" placeholder="Enter Item Name" required />
+                <input id="price" className="form-control" type="number" step="0.01" placeholder="Enter Item Price" required />
+                <input id="desc" className="form-control" type="text" placeholder="Enter Item Description" required />
+                <button type="submit">
+                    {edit ? 'Edit Item' : 'Add Item'}
+                </button>
+                <button type="button" className="back-button" onClick={goBack}>Go Back</button>
             </form>
             <br />
             <table className="restaurant-table">
@@ -139,7 +140,7 @@ const RestaurantMenu = () => {
                             <td>{menu.price}</td>
                             <td>{menu.description}</td>
                             <td>
-                                <button className="action-button edit-button" onClick={() => { editButton(menu.itemId) }}>Edit</button>
+                                <button className="action-button edit-button" onClick={() => editButton(menu.itemId)}>Edit</button>
                                 <button className="action-button delete-button" onClick={() => handleDelete(menu.itemId)}>Delete</button>
                             </td>
                         </tr>

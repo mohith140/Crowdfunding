@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const RestaurantList = () => {
     const [edit, setEdit] = useState(false);
     const [restaurants, setRestaurants] = useState([]);
-    const [id, setId] = useState();
+    const [id, setId] = useState(null);
 
     const navigate = useNavigate();
 
@@ -23,7 +23,8 @@ const RestaurantList = () => {
         }
     };
 
-    const handleRestaurantUpdate = async () => {
+    const handleRestaurantUpdate = async (event) => {
+        event.preventDefault();
         const name = document.getElementById('name').value;
         const address = document.getElementById('address').value;
         const phone = document.getElementById('phone').value;
@@ -64,10 +65,14 @@ const RestaurantList = () => {
     };
 
     const handleDelete = async (id) => {
-        await fetch(`http://localhost:5000/api/admin/restaurants/${id}`, {
-            method: 'DELETE'
-        });
-        setRestaurants(restaurants.filter((restaurant) => restaurant.restaurantId !== id));
+        try {
+            await fetch(`http://localhost:5000/api/admin/restaurants/${id}`, {
+                method: 'DELETE'
+            });
+            setRestaurants(restaurants.filter((restaurant) => restaurant.restaurantId !== id));
+        } catch (error) {
+            console.error('Error deleting restaurant:', error);
+        }
     };
 
     const editButton = (id) => {
@@ -83,18 +88,23 @@ const RestaurantList = () => {
         navigate(`/${id}/menu`);
     };
 
+    const goBack = () => {
+        navigate(-1);
+    };
+
     return (
         <div className="restaurant-list-container">
             <h2 className="restaurant-list-heading">Restaurants List</h2>
-            <form id="restaurantForm">
+            <form id="restaurantForm" onSubmit={handleRestaurantUpdate}>
                 {!edit && <input id="id" className="form-control" type="text" placeholder="Enter Restaurant ID" />}
                 <input id="name" className="form-control" type="text" placeholder="Enter Restaurant Name" />
                 <input id="address" className="form-control" type="text" placeholder="Enter Restaurant Address" />
                 <input id="phone" className="form-control" type="text" placeholder="Enter Restaurant Phone" />
-                <button type="button" onClick={handleRestaurantUpdate}>
+                <button type="submit">
                     {edit ? 'Edit Restaurant' : 'Add Restaurant'}
                 </button>
             </form>
+            <button className="back-button" onClick={goBack}>Go Back</button>
             <table className="restaurant-table">
                 <thead>
                     <tr>
