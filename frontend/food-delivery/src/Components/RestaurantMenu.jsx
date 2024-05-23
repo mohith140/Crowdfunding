@@ -104,6 +104,10 @@ const RestaurantMenu = () => {
         setCurrentMenuId(id);
     };
 
+    const cancelEdit = () => {
+        resetForm();
+    };
+
     const goBack = () => {
         navigate(-1);
     };
@@ -119,6 +123,9 @@ const RestaurantMenu = () => {
                 <button type="submit">
                     {edit ? 'Edit Item' : 'Add Item'}
                 </button>
+                {edit && (
+                    <button type="button" className="cancel-button" onClick={cancelEdit}>Cancel Edit</button>
+                )}
                 <button type="button" className="back-button" onClick={goBack}>Go Back</button>
             </form>
             <br />

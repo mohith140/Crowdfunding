@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const RestaurantList = () => {
     const [edit, setEdit] = useState(false);
     const [restaurants, setRestaurants] = useState([]);
-    const [id, setId] = useState(null);
+    const [currentRestaurantId, setCurrentRestaurantId] = useState(null);
 
     const navigate = useNavigate();
 
@@ -23,44 +23,43 @@ const RestaurantList = () => {
         }
     };
 
-    const handleRestaurantUpdate = async (event) => {
+    const handleRestaurantSubmit = async (event) => {
         event.preventDefault();
         const name = document.getElementById('name').value;
         const address = document.getElementById('address').value;
         const phone = document.getElementById('phone').value;
 
+        const restaurantData = { name, address, phone };
+
         if (edit) {
             try {
-                const data = { name, address, phone };
-                await fetch(`http://localhost:5000/api/admin/restaurants/${id}`, {
+                await fetch(`http://localhost:5000/api/admin/restaurants/${currentRestaurantId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(restaurantData)
                 });
             } catch (err) {
                 console.log('Error updating restaurant:', err);
             }
         } else {
             const restaurantId = document.getElementById('id').value;
-            const data = { restaurantId, name, address, phone };
+            restaurantData.restaurantId = restaurantId;
             try {
                 await fetch('http://localhost:5000/api/admin/restaurants', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(restaurantData)
                 });
             } catch (err) {
                 console.log('Error adding new restaurant:', err);
             }
         }
 
-        setEdit(false);
-        setId(null);
-        document.getElementById('restaurantForm').reset();
+        resetForm();
         fetchRestaurants();
     };
 
@@ -76,12 +75,23 @@ const RestaurantList = () => {
     };
 
     const editButton = (id) => {
-        setEdit(true);
-        setId(id);
         const restaurant = restaurants.find((rest) => rest.restaurantId === id);
         document.getElementById('name').value = restaurant.name;
         document.getElementById('address').value = restaurant.address;
         document.getElementById('phone').value = restaurant.phone;
+
+        setEdit(true);
+        setCurrentRestaurantId(id);
+    };
+
+    const cancelEdit = () => {
+        resetForm();
+    };
+
+    const resetForm = () => {
+        setEdit(false);
+        setCurrentRestaurantId(null);
+        document.getElementById('restaurantForm').reset();
     };
 
     const showMenu = (id) => {
@@ -95,14 +105,17 @@ const RestaurantList = () => {
     return (
         <div className="restaurant-list-container">
             <h2 className="restaurant-list-heading">Restaurants List</h2>
-            <form id="restaurantForm" onSubmit={handleRestaurantUpdate}>
+            <form id="restaurantForm" onSubmit={handleRestaurantSubmit}>
                 {!edit && <input id="id" className="form-control" type="text" placeholder="Enter Restaurant ID" />}
-                <input id="name" className="form-control" type="text" placeholder="Enter Restaurant Name" />
-                <input id="address" className="form-control" type="text" placeholder="Enter Restaurant Address" />
-                <input id="phone" className="form-control" type="text" placeholder="Enter Restaurant Phone" />
+                <input id="name" className="form-control" type="text" placeholder="Enter Restaurant Name" required />
+                <input id="address" className="form-control" type="text" placeholder="Enter Restaurant Address" required />
+                <input id="phone" className="form-control" type="text" placeholder="Enter Restaurant Phone" required />
                 <button type="submit">
                     {edit ? 'Edit Restaurant' : 'Add Restaurant'}
                 </button>
+                {edit && (
+                    <button type="button" className="cancel-button" onClick={cancelEdit}>Cancel Edit</button>
+                )}
             </form>
             <button className="back-button" onClick={goBack}>Go Back</button>
             <table className="restaurant-table">
