@@ -50,6 +50,7 @@ function App() {
               <Route path='/user/restaurants' element={<UserRestaurants />} />
               <Route path='/user/restaurants/:id/menu' element={<UserRestaurantMenu />} />
               <Route path='/:id/menu' element={<Menu />} />
+              <Route path='*' element={<Signup />} />
             </Routes>
           </div>
         </div>

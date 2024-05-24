@@ -7,6 +7,7 @@ function UserRestaurantMenu() {
     const [menus, setMenus] = useState([]);
     const [name, setName] = useState('');
     const [cart, setCart] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const params = useParams();
 
@@ -35,13 +36,16 @@ function UserRestaurantMenu() {
         }
     };
 
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
     const addToCart = (item) => {
         setCart(prevCart => {
             const existingItemIndex = prevCart.findIndex(cartItem => cartItem.itemId === item.itemId);
             if (existingItemIndex >= 0) {
                 const updatedCart = [...prevCart];
                 updatedCart[existingItemIndex].quantity += 1;
-                console.log(updatedCart)
                 return updatedCart;
             } else {
                 return [...prevCart, { ...item, quantity: 1 }];
@@ -49,15 +53,26 @@ function UserRestaurantMenu() {
         });
     };
 
+    const removeFromCart = (itemId) => {
+        setCart(prevCart => prevCart.filter(item => item.itemId !== itemId));
+    };
+
+    const updateQuantity = (itemId, quantity) => {
+        setCart(prevCart => prevCart.map(item =>
+            item.itemId === itemId ? { ...item, quantity: item.quantity + quantity } : item
+        ).filter(item => item.quantity > 0));
+    };
+
     const placeOrder = async () => {
         const orderId = uuidv4();  // Generate a unique order ID using uuid
+        const totalPrice = getTotalPrice()
         try {
             const response = await fetch('http://localhost:5000/api/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ orderId, items: cart }),
+                body: JSON.stringify({ orderId, items: cart, totalPrice }),
             });
             const result = await response.json();
             alert('Order placed successfully!');
@@ -65,6 +80,14 @@ function UserRestaurantMenu() {
         } catch (error) {
             console.error('Error placing order:', error);
         }
+    };
+
+    const filteredMenus = menus.filter(menu =>
+        menu.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const getTotalPrice = () => {
+        return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
     };
 
     return (
@@ -89,8 +112,19 @@ function UserRestaurantMenu() {
             </nav>
             <div className="container-fluid mt-5">
                 <h2 className="text-center mb-4">{name}'s Menu</h2>
+                <div className="row justify-content-center mb-4">
+                    <div className="col-md-6">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search for an item"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                        />
+                    </div>
+                </div>
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-5">
-                    {menus.map(menu => (
+                    {filteredMenus.map(menu => (
                         <div className="col mb-4" key={menu.itemId}>
                             <div className="card restaurant-card">
                                 <img
@@ -108,8 +142,40 @@ function UserRestaurantMenu() {
                     ))}
                 </div>
                 {cart.length > 0 && (
-                    <div className="text-center mt-4">
-                        <button className="btn btn-success" onClick={placeOrder}>Place Order</button>
+                    <div className="cart-summary mt-4">
+                        <h3 className="text-center">Cart Summary</h3>
+                        <div className="table-responsive">
+                            <table className="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Total</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {cart.map(item => (
+                                        <tr key={item.itemId}>
+                                            <td>{item.name}</td>
+                                            <td>{item.quantity}</td>
+                                            <td>&#8377; {item.price}</td>
+                                            <td>&#8377; {item.price * item.quantity}</td>
+                                            <td>
+                                                <button className="btn btn-secondary btn-sm me-2" onClick={() => updateQuantity(item.itemId, -1)}>-</button>
+                                                <button className="btn btn-secondary btn-sm me-2" onClick={() => updateQuantity(item.itemId, 1)}>+</button>
+                                                <button className="btn btn-danger btn-sm" onClick={() => removeFromCart(item.itemId)}>Remove</button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="text-center mt-4">
+                            <h4>Total Price: &#8377; {getTotalPrice()}</h4>
+                            <button className="btn btn-success" onClick={placeOrder}>Place Order</button>
+                        </div>
                     </div>
                 )}
             </div>

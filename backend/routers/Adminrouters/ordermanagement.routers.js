@@ -35,4 +35,12 @@ orderRouter.put('/:id/status', async (req, res) => {
     }
 });
 
+orderRouter.delete('/:id', async (req, res) => {
+
+    const { id } = req.params;
+    const updtaedOrders = await orderModel.findOneAndDelete({ orderId: id });
+    res.json("Success")
+
+})
+
 module.exports = orderRouter;

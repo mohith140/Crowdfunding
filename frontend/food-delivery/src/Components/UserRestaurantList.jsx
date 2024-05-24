@@ -4,6 +4,7 @@ import './CSS/UserRestaurantList.css'; // Import custom CSS for navbar styling
 
 function UserRestaurantList() {
     const [restaurants, setRestaurants] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         fetchRestaurants();
@@ -18,6 +19,14 @@ function UserRestaurantList() {
             console.error('Error fetching restaurants:', error);
         }
     };
+
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const filteredRestaurants = restaurants.filter(restaurant =>
+        restaurant.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <>
@@ -41,8 +50,17 @@ function UserRestaurantList() {
             </nav>
             <div className="container-fluid mt-5">
                 <h2 className="text-center mb-4">Restaurants</h2>
+                <div className="d-flex justify-content-center mb-4">
+                    <input
+                        type="text"
+                        className="form-control w-50"
+                        placeholder="Search for a restaurant"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                    />
+                </div>
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-5">
-                    {restaurants.map(restaurant => (
+                    {filteredRestaurants.map(restaurant => (
                         <div className="col mb-4" key={restaurant.restaurantId}>
                             <div className="card restaurant-card">
                                 <img

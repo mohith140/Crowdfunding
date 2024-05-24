@@ -4,6 +4,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import './CSS/AdminDashboard.css';
 
 const AdminDashboard = () => {
+
+
+
     return (
         <div className="admin-dashboard">
             <div id="wrapper" className="d-flex">
@@ -19,12 +22,6 @@ const AdminDashboard = () => {
                         </li>
                         <li className="nav-item mb-2">
                             <Link to="/restaurants" className="nav-link text-white">Restaurants</Link>
-                        </li>
-                        <li className="nav-item mb-2">
-                            <Link to="/customers" className="nav-link text-white">Customers</Link>
-                        </li>
-                        <li className="nav-item mb-2">
-                            <Link to="/settings" className="nav-link text-white">Settings</Link>
                         </li>
                     </ul>
                 </div>

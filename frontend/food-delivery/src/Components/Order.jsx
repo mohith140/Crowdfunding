@@ -13,27 +13,18 @@ const Orders = () => {
         try {
             const response = await fetch('http://localhost:5000/api/admin/orders');
             const data = await response.json();
-            console.log(orders)
             setOrders(data);
         } catch (error) {
             console.error('Error fetching orders:', error);
         }
     };
 
-    const handleStatusUpdate = async (orderId, status) => {
-        try {
-            await fetch(`http://localhost:5000/api/orders/${orderId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ status })
-            });
-            fetchOrders();
-        } catch (error) {
-            console.error('Error updating order status:', error);
-        }
-    };
+    const handleStatus = async (id) => {
+        await fetch(`http://localhost:5000/api/admin/orders/${id}`, {
+            method: 'DELETE'
+        })
+        fetchOrders()
+    }
 
     return (
         <div className="orders-container">
@@ -60,14 +51,12 @@ const Orders = () => {
                             </ul>
                             <p><strong>Total:</strong> ₹{order.totalPrice}</p>
                         </div>
-                        <div className="order-actions">
-                            {order.status === 'Pending' && (
-                                <>
-                                    <button className="btn btn-success" onClick={() => handleStatusUpdate(order.id, 'Completed')}>Mark as Completed</button>
-                                    <button className="btn btn-danger" onClick={() => handleStatusUpdate(order.id, 'Cancelled')}>Cancel Order</button>
-                                </>
-                            )}
-                        </div>
+                        {
+                            <div>
+                                <button className="btn btn-success" onClick={() => handleStatus(order.orderId)}>Completed</button>
+                                <button className="btn btn-primary">Cancel</button>
+                            </div>
+                        }
                     </div>
                 </div>
             ))}
