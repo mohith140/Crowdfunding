@@ -24,10 +24,10 @@ function Login() {
 
             const result = await response.json();
             console.log(result);
-            if (response.status === 200) {
+            if (result.role === "Admin") {
                 navigate('/dashboard');
             } else {
-                alert(result);
+                navigate('/user/restaurants')
             }
         } catch (error) {
             console.error('Error:', error);

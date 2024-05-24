@@ -4,9 +4,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import './CSS/AdminDashboard.css';
 
 const AdminDashboard = () => {
-
-
-
     return (
         <div className="admin-dashboard">
             <div id="wrapper" className="d-flex">

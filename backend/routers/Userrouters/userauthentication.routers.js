@@ -45,7 +45,7 @@ const varifyUser = (req, res, next) => {
     }
 }
 
-router.get('/dashboard', varifyUser, (req, res) => {
+router.post('/dashboard', varifyUser, (req, res) => {
     res.json("Success")
 })
 
@@ -64,7 +64,7 @@ router.post('/login', async (req, res) => {
                         req.session.cookie.path = user._id
                         // req.session.userId = user._id
                         // console.log(req.session.cookie)
-                        return res.status(200).json({ Status: "Success", id: user._id, token })
+                        return res.status(200).json({ Status: "Success", token, role: user.role, email })
                     } else {
                         return res.status(500).json("The password is incorrect")
                     }
