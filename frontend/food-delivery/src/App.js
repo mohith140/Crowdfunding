@@ -31,6 +31,8 @@ import Signup from './Components/Signup';
 import Login from './Components/Login';
 import Order from './Components/Order';
 import Restaurants from './Components/ReastaurantList';
+import UserRestaurants from './Components/UserRestaurantList';
+import UserRestaurantMenu from './Components/UserRestaurantMenu';
 import Menu from './Components/RestaurantMenu';
 
 function App() {
@@ -45,6 +47,8 @@ function App() {
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/orders' element={<Order />} />
               <Route path='/restaurants' element={<Restaurants />} />
+              <Route path='/user/restaurants' element={<UserRestaurants />} />
+              <Route path='/user/restaurants/:id/menu' element={<UserRestaurantMenu />} />
               <Route path='/:id/menu' element={<Menu />} />
             </Routes>
           </div>

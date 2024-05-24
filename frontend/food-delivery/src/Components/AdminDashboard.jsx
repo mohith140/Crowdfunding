@@ -9,10 +9,10 @@ const AdminDashboard = () => {
             <div id="wrapper" className="d-flex">
                 {/* Sidebar */}
                 <div className="bg-primary sidebar text-white p-3">
-                    <h3 className="text-center mb-4">Admin Dashboard</h3>
+                    <h3 className="text-center mb-4">Quick Bite</h3>
                     <ul className="nav flex-column">
                         <li className="nav-item mb-2">
-                            <Link to="/" className="nav-link text-white">Dashboard</Link>
+                            <Link to="/dashboard" className="nav-link text-white">Dashboard</Link>
                         </li>
                         <li className="nav-item mb-2">
                             <Link to="/orders" className="nav-link text-white">Orders</Link>
@@ -30,7 +30,7 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Content Wrapper */}
-                <div id="content-wrapper" className="flex-grow-1 d-flex flex-column">
+                <div id="content-wrapper1" className="flex-grow-1 d-flex flex-column">
                     {/* Main Content */}
                     <div className="container-fluid">
                         <div className="d-sm-flex align-items-center justify-content-between mb-4">

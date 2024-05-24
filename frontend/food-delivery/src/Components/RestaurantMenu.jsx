@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './CSS/RestaurantList.css';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 
 const RestaurantMenu = () => {
     const [edit, setEdit] = useState(false);
@@ -114,46 +114,71 @@ const RestaurantMenu = () => {
 
     return (
         <div className="restaurant-list-container">
-            <h2 className="restaurant-list-heading">{name}'s Menu List</h2>
-            <form id="menuForm" onSubmit={handleMenuSubmit}>
-                {!edit && <input id="id" className="form-control" type="text" placeholder="Enter Menu ID" />}
-                <input id="name" className="form-control" type="text" placeholder="Enter Item Name" required />
-                <input id="price" className="form-control" type="number" step="0.01" placeholder="Enter Item Price" required />
-                <input id="desc" className="form-control" type="text" placeholder="Enter Item Description" required />
-                <button type="submit">
-                    {edit ? 'Edit Item' : 'Add Item'}
-                </button>
-                {edit && (
-                    <button type="button" className="cancel-button" onClick={cancelEdit}>Cancel Edit</button>
-                )}
-                <button type="button" className="back-button" onClick={goBack}>Go Back</button>
-            </form>
-            <br />
-            <table className="restaurant-table">
-                <thead>
-                    <tr>
-                        <th>Item Id</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {menus.map((menu) => (
-                        <tr key={menu.itemId}>
-                            <td>{menu.itemId}</td>
-                            <td>{menu.name}</td>
-                            <td>{menu.price}</td>
-                            <td>{menu.description}</td>
-                            <td>
-                                <button className="action-button edit-button" onClick={() => editButton(menu.itemId)}>Edit</button>
-                                <button className="action-button delete-button" onClick={() => handleDelete(menu.itemId)}>Delete</button>
-                            </td>
+            {/* Sidebar */}
+            <div className="bg-primary sidebar text-white p-3">
+                <h3 className="text-center mb-4">Quick Bite</h3>
+                <ul className="nav flex-column">
+                    <li className="nav-item mb-2">
+                        <Link to="/dashboard" className="nav-link text-white">Dashboard</Link>
+                    </li>
+                    <li className="nav-item mb-2">
+                        <Link to="/orders" className="nav-link text-white">Orders</Link>
+                    </li>
+                    <li className="nav-item mb-2">
+                        <Link to="/restaurants" className="nav-link text-white">Restaurants</Link>
+                    </li>
+                    <li className="nav-item mb-2">
+                        <Link to="/customers" className="nav-link text-white">Customers</Link>
+                    </li>
+                    <li className="nav-item mb-2">
+                        <Link to="/settings" className="nav-link text-white">Settings</Link>
+                    </li>
+                </ul>
+            </div>
+
+            {/* Content Wrapper */}
+            <div id="content-wrapper1" className="flex-grow-1 d-flex flex-column">
+                <h2 className="restaurant-list-heading">{name}'s Menu List</h2>
+                <form id="menuForm" onSubmit={handleMenuSubmit}>
+                    {!edit && <input id="id" className="form-control" type="text" placeholder="Enter Menu ID" />}
+                    <input id="name" className="form-control" type="text" placeholder="Enter Item Name" required />
+                    <input id="price" className="form-control" type="number" step="0.01" placeholder="Enter Item Price" required />
+                    <input id="desc" className="form-control" type="text" placeholder="Enter Item Description" required />
+                    <button type="submit">
+                        {edit ? 'Edit Item' : 'Add Item'}
+                    </button>
+                    {edit && (
+                        <button type="button" className="cancel-button" onClick={cancelEdit}>Cancel Edit</button>
+                    )}
+                    <button type="button" className="back-button" onClick={goBack}>Go Back</button>
+                </form>
+                <br />
+                <table className="restaurant-table">
+                    <thead>
+                        <tr>
+                            <th>Item Id</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Description</th>
+                            <th>Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {menus.map((menu) => (
+                            <tr key={menu.itemId}>
+                                <td>{menu.itemId}</td>
+                                <td>{menu.name}</td>
+                                <td>{menu.price}</td>
+                                <td>{menu.description}</td>
+                                <td>
+                                    <button className="action-button edit-button" onClick={() => editButton(menu.itemId)}>Edit</button>
+                                    <button className="action-button delete-button" onClick={() => handleDelete(menu.itemId)}>Delete</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

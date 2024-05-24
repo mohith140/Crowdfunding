@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './CSS/RestaurantList.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const RestaurantList = () => {
     const [edit, setEdit] = useState(false);
@@ -104,46 +104,69 @@ const RestaurantList = () => {
 
     return (
         <div className="restaurant-list-container">
-            <h2 className="restaurant-list-heading">Restaurants List</h2>
-            <form id="restaurantForm" onSubmit={handleRestaurantSubmit}>
-                {!edit && <input id="id" className="form-control" type="text" placeholder="Enter Restaurant ID" />}
-                <input id="name" className="form-control" type="text" placeholder="Enter Restaurant Name" required />
-                <input id="address" className="form-control" type="text" placeholder="Enter Restaurant Address" required />
-                <input id="phone" className="form-control" type="text" placeholder="Enter Restaurant Phone" required />
-                <button type="submit">
-                    {edit ? 'Edit Restaurant' : 'Add Restaurant'}
-                </button>
-                {edit && (
-                    <button type="button" className="cancel-button" onClick={cancelEdit}>Cancel Edit</button>
-                )}
-            </form>
-            <button className="back-button" onClick={goBack}>Go Back</button>
-            <table className="restaurant-table">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>Phone</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {restaurants.map((restaurant) => (
-                        <tr key={restaurant.restaurantId}>
-                            <td>{restaurant.restaurantId}</td>
-                            <td>{restaurant.name}</td>
-                            <td>{restaurant.address}</td>
-                            <td>{restaurant.phone}</td>
-                            <td>
-                                <button className="action-button show-menu-button" onClick={() => showMenu(restaurant.restaurantId)}>Show Menu</button>
-                                <button className="action-button edit-button" onClick={() => editButton(restaurant.restaurantId)}>Edit</button>
-                                <button className="action-button delete-button" onClick={() => handleDelete(restaurant.restaurantId)}>Delete</button>
-                            </td>
+            {/* Sidebar */}
+            <div className="bg-primary sidebar text-white p-3">
+                <h3 className="text-center mb-4">Quick Bite</h3>
+                <ul className="nav flex-column">
+                    <li className="nav-item mb-2">
+                        <Link to="/dashboard" className="nav-link text-white">Dashboard</Link>
+                    </li>
+                    <li className="nav-item mb-2">
+                        <Link to="/orders" className="nav-link text-white">Orders</Link>
+                    </li>
+                    <li className="nav-item mb-2">
+                        <Link to="/restaurants" className="nav-link text-white">Restaurants</Link>
+                    </li>
+                    <li className="nav-item mb-2">
+                        <Link to="/customers" className="nav-link text-white">Customers</Link>
+                    </li>
+                    <li className="nav-item mb-2">
+                        <Link to="/settings" className="nav-link text-white">Settings</Link>
+                    </li>
+                </ul>
+            </div>
+            {/* Content Wrapper */}
+            <div id="content-wrapper1" className="flex-grow-1 d-flex flex-column">
+                <h2 className="restaurant-list-heading">Restaurants List</h2>
+                <form id="restaurantForm" onSubmit={handleRestaurantSubmit}>
+                    {!edit && <input id="id" className="form-control" type="text" placeholder="Enter Restaurant ID" />}
+                    <input id="name" className="form-control" type="text" placeholder="Enter Restaurant Name" required />
+                    <input id="address" className="form-control" type="text" placeholder="Enter Restaurant Address" required />
+                    <input id="phone" className="form-control" type="text" placeholder="Enter Restaurant Phone" required />
+                    <button type="submit">
+                        {edit ? 'Edit Restaurant' : 'Add Restaurant'}
+                    </button>
+                    {edit && (
+                        <button type="button" className="cancel-button" onClick={cancelEdit}>Cancel Edit</button>
+                    )}
+                </form>
+                <table className="restaurant-table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Phone</th>
+                            <th>Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {restaurants.map((restaurant) => (
+                            <tr key={restaurant.restaurantId}>
+                                <td>{restaurant.restaurantId}</td>
+                                <td>{restaurant.name}</td>
+                                <td>{restaurant.address}</td>
+                                <td>{restaurant.phone}</td>
+                                <td>
+                                    <button className="action-button show-menu-button" onClick={() => showMenu(restaurant.restaurantId)}>Show Menu</button>
+                                    <button className="action-button edit-button" onClick={() => editButton(restaurant.restaurantId)}>Edit</button>
+                                    <button className="action-button delete-button" onClick={() => handleDelete(restaurant.restaurantId)}>Delete</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };
