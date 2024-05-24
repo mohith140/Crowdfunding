@@ -11,8 +11,9 @@ const Orders = () => {
 
     const fetchOrders = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/orders');
+            const response = await fetch('http://localhost:5000/api/admin/orders');
             const data = await response.json();
+            console.log(orders)
             setOrders(data);
         } catch (error) {
             console.error('Error fetching orders:', error);
@@ -38,9 +39,9 @@ const Orders = () => {
         <div className="orders-container">
             <h2 className="orders-heading">Orders</h2>
             {orders.map(order => (
-                <div className="card order-card" key={order.id}>
+                <div className="card order-card" key={order.orderId}>
                     <div className="order-card-header d-flex justify-content-between align-items-center">
-                        <h5 className="mb-0">Order #{order.id}</h5>
+                        <h5 className="mb-0">Order #{order.orderId}</h5>
                         <span className={`status-badge status-${order.status.toLowerCase()}`}>
                             {order.status}
                         </span>
@@ -50,13 +51,14 @@ const Orders = () => {
                             <p><strong>Customer:</strong> {order.customerName}</p>
                             <p><strong>Address:</strong> {order.customerAddress}</p>
                             <p><strong>Phone:</strong> {order.customerPhone}</p>
+                            <p><strong>Restaurant ID:</strong> {order.restaurantId}</p>
                             <p><strong>Items:</strong></p>
                             <ul>
                                 {order.items.map(item => (
                                     <li key={item.id}>{item.quantity} x {item.name}</li>
                                 ))}
                             </ul>
-                            <p><strong>Total:</strong> ${order.total}</p>
+                            <p><strong>Total:</strong> ₹{order.totalPrice}</p>
                         </div>
                         <div className="order-actions">
                             {order.status === 'Pending' && (

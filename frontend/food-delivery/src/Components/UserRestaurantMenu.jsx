@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';  // Import uuid library for generating unique order IDs
 import './CSS/UserRestaurantList.css'; // Import custom CSS for navbar styling
 
 function UserRestaurantMenu() {
@@ -22,7 +23,7 @@ function UserRestaurantMenu() {
         } catch (err) {
             console.log(err.message);
         }
-    }
+    };
 
     const fetchMenus = async () => {
         try {
@@ -35,17 +36,28 @@ function UserRestaurantMenu() {
     };
 
     const addToCart = (item) => {
-        setCart([...cart, item]);
+        setCart(prevCart => {
+            const existingItemIndex = prevCart.findIndex(cartItem => cartItem.itemId === item.itemId);
+            if (existingItemIndex >= 0) {
+                const updatedCart = [...prevCart];
+                updatedCart[existingItemIndex].quantity += 1;
+                console.log(updatedCart)
+                return updatedCart;
+            } else {
+                return [...prevCart, { ...item, quantity: 1 }];
+            }
+        });
     };
 
     const placeOrder = async () => {
+        const orderId = uuidv4();  // Generate a unique order ID using uuid
         try {
             const response = await fetch('http://localhost:5000/api/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ items: cart }),
+                body: JSON.stringify({ orderId, items: cart }),
             });
             const result = await response.json();
             alert('Order placed successfully!');
@@ -88,6 +100,7 @@ function UserRestaurantMenu() {
                                 />
                                 <div className="card-body text-center">
                                     <h5 className="card-title">{menu.name}</h5>
+                                    <p className="card-text">&#8377; {menu.price}</p>
                                     <button className="btn btn-primary" onClick={() => addToCart(menu)}>Add to Cart</button>
                                 </div>
                             </div>
