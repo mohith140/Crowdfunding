@@ -24,8 +24,6 @@ function Login() {
 
             const result = await response.json();
             console.log(result);
-            localStorage.setItem('token', result.token)
-            localStorage.setItem("id", result.id);
             if (response.status === 200) {
                 navigate('/dashboard');
             } else {

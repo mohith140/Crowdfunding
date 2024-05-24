@@ -127,12 +127,6 @@ const RestaurantMenu = () => {
                     <li className="nav-item mb-2">
                         <Link to="/restaurants" className="nav-link text-white">Restaurants</Link>
                     </li>
-                    <li className="nav-item mb-2">
-                        <Link to="/customers" className="nav-link text-white">Customers</Link>
-                    </li>
-                    <li className="nav-item mb-2">
-                        <Link to="/settings" className="nav-link text-white">Settings</Link>
-                    </li>
                 </ul>
             </div>
 
