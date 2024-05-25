@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import Navbar from './Navbar';
 import { v4 as uuidv4 } from 'uuid';  // Import uuid library for generating unique order IDs
 import './CSS/UserRestaurantList.css'; // Import custom CSS for navbar styling
 
@@ -92,24 +93,8 @@ function UserRestaurantMenu() {
 
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-                <div className="container-fluid">
-                    <Link className="navbar-brand" to="/user/restaurants">Quick Bite</Link>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarNav">
-                        <ul className="navbar-nav ms-auto">
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/profile">Profile</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/cart">Cart</Link>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+
+            <Navbar />
             <div className="container-fluid mt-5">
                 <h2 className="text-center mb-4">{name}'s Menu</h2>
                 <div className="row justify-content-center mb-4">

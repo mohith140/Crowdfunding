@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './CSS/Login.css';
+import { useAuth } from './AuthContext';
 
 function Login() {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const navigate = useNavigate();
+    const auth = useAuth();
+
+    // useEffect(() => {
+    //     if (auth.token !== null && auth.role === "Customer")
+    //         navigate("/user/restaurants")
+    //     else if (auth.token !== null && auth.role === "Admin")
+    //         navigate("/dashboard")
+
+    // }, [auth.role])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -13,24 +23,12 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const response = await fetch('http://localhost:5000/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-
-            const result = await response.json();
-            console.log(result);
-            if (result.role === "Admin") {
-                navigate('/dashboard');
-            } else {
-                navigate('/user/restaurants')
-            }
-        } catch (error) {
-            console.error('Error:', error);
+        const user = await auth.loginAction(formData);
+        // console.log(user)
+        if (user.role === "Admin") {
+            navigate('/dashboard');
+        } else if (user.role === "Customer") {
+            navigate('/user/restaurants');
         }
     };
 

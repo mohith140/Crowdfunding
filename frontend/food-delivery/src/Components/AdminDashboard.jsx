@@ -2,8 +2,11 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate, Link } from 'react-router-dom';
 import './CSS/AdminDashboard.css';
+import { useAuth } from './AuthContext';
 
 const AdminDashboard = () => {
+    const { user } = useAuth();
+    // console.log(user)
     return (
         <div className="admin-dashboard">
             <div id="wrapper" className="d-flex">
@@ -27,6 +30,9 @@ const AdminDashboard = () => {
                 <div id="content-wrapper1" className="flex-grow-1 d-flex flex-column">
                     {/* Main Content */}
                     <div className="container-fluid">
+                        <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                            <h1 className="h3 mb-0 text-gray-800">Welcome, {user.username}!</h1>
+                        </div>
                         <div className="d-sm-flex align-items-center justify-content-between mb-4">
                             <h1 className="h3 mb-0 text-gray-800">Dashboard</h1>
                         </div>

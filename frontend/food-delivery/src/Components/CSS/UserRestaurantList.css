@@ -1,48 +1,89 @@
-/* Custom styling for the navbar */
+/* Custom CSS for UserRestaurantList */
+
+.navbar {
+    padding: 1rem 2rem;
+}
+
 .navbar-brand {
-    font-size: 1.5rem;
-    font-weight: bold;
+    display: flex;
+    align-items: center;
 }
 
-.navbar-nav .nav-link {
-    font-size: 1.2rem;
+.navbar-brand .logo {
+    height: 40px;
+    margin-right: 10px;
 }
 
-/* Additional styling for the card */
+.nav-link {
+    margin-left: 15px;
+    font-size: 1.1rem;
+}
+
+.container {
+    padding: 2rem;
+}
+
+.search-bar {
+    width: 50%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+}
+
 .restaurant-card {
-    border: 1px solid #dee2e6;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: none;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .restaurant-card:hover {
-    transform: translateY(-5px);
-    transition: all 0.3s ease;
+    transform: translateY(-10px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
-.card-img {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    max-height: 200px;
+.card-img-top {
+    border-top-left-radius: calc(0.25rem - 1px);
+    border-top-right-radius: calc(0.25rem - 1px);
+    height: 200px;
     object-fit: cover;
 }
 
-.card-body {
-    padding: 1.5rem;
-}
-
 .card-title {
+    margin: 1rem 0;
     font-size: 1.25rem;
     font-weight: bold;
 }
 
 .btn-primary {
-    background-color: #ff6b6b;
-    border-color: #ff6b6b;
-    transition: background-color 0.3s ease;
+    background-color: #007bff;
+    border-color: #007bff;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 .btn-primary:hover {
-    background-color: #f74141;
-    border-color: #f74141;
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+/* UserRestaurantList.css */
+
+.carousel-container {
+    max-width: 800px;
+    /* Adjust the width as needed */
+    margin: 0 auto;
+    /* Center the carousel */
+}
+
+.carousel-item img {
+    height: 400px;
+    /* Adjust the height as needed */
+    object-fit: cover;
+    /* Ensure the image covers the carousel item */
+}
+
+.carousel-caption {
+    background-color: rgba(255, 255, 255, 0.5);
+    /* Optional: Add a background to captions for better readability */
+    padding: 10px;
+    border-radius: 5px;
 }

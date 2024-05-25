@@ -34,28 +34,39 @@ import Restaurants from './Components/ReastaurantList';
 import UserRestaurants from './Components/UserRestaurantList';
 import UserRestaurantMenu from './Components/UserRestaurantMenu';
 import Menu from './Components/RestaurantMenu';
+import AuthProvider from './Components/AuthContext';
+import UserProtected from './routes/UserProtected';
+import AdminProtected from './routes/AdminProtected';
+import Profile from './Components/Profile';
 
 function App() {
   return (
-    <BrowserRouter>
-      <div id="wrapper">
-        <div id="content-wrapper" className="d-flex flex-column">
-          <div id="content">
-            <Routes>
-              <Route path='/signup' element={<Signup />} />
-              <Route path='login' element={<Login />} />
-              <Route path='/dashboard' element={<Dashboard />} />
-              <Route path='/orders' element={<Order />} />
-              <Route path='/restaurants' element={<Restaurants />} />
-              <Route path='/user/restaurants' element={<UserRestaurants />} />
-              <Route path='/user/restaurants/:id/menu' element={<UserRestaurantMenu />} />
-              <Route path='/:id/menu' element={<Menu />} />
-              <Route path='*' element={<Signup />} />
-            </Routes>
+    <AuthProvider>
+      <BrowserRouter>
+        <div id="wrapper">
+          <div id="content-wrapper" className="d-flex flex-column">
+            <div id="content">
+              <Routes>
+                <Route path='/signup' element={<Signup />} />
+                <Route path='login' element={<Login />} />
+                <Route element={<AdminProtected />}>
+                  <Route path='/dashboard' element={<Dashboard />} />
+                  <Route path='/restaurants' element={<Restaurants />} />
+                  <Route path='/orders' element={<Order />} />
+                  <Route path='/:id/menu' element={<Menu />} />
+                </Route>
+                <Route element={<UserProtected />}>
+                  <Route path='/user/restaurants' element={<UserRestaurants />} />
+                  <Route path='/user/restaurants/:id/menu' element={<UserRestaurantMenu />} />
+                  <Route path='/user/profile' element={<Profile />} />
+                </Route>
+                <Route path='*' element={<Login />} />
+              </Routes>
+            </div>
           </div>
         </div>
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

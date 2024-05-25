@@ -24,30 +24,32 @@ router.use(cors({
 router.use(cookieParser())
 router.use(express.json())
 
-const varifyUser = (req, res, next) => {
-    const token = localStorage.getItem('token');
-    console.log(token);
-    if (!token) {
-        return res.status(404).json("Token is missing")
-    } else {
-        jwt.verify(token, "jwt-secret-key", (err, decoded) => {
-            if (err) {
-                return res.status(500).json("Error with token")
-            } else {
-                if (decoded.role === "admin") {
-                    return res.status(200)
-                    next()
-                } else {
-                    return res.json("not admin")
-                }
-            }
-        })
-    }
-}
+var token;
 
-router.post('/dashboard', varifyUser, (req, res) => {
-    res.json("Success")
-})
+// const varifyUser = (req, res, next) => {
+//     const token = localStorage.getItem('token');
+//     console.log(token);
+//     if (!token) {
+//         return res.status(404).json("Token is missing")
+//     } else {
+//         jwt.verify(token, "jwt-secret-key", (err, decoded) => {
+//             if (err) {
+//                 return res.status(500).json("Error with token")
+//             } else {
+//                 if (decoded.role === "admin") {
+//                     return res.status(200)
+//                     next()
+//                 } else {
+//                     return res.json("not admin")
+//                 }
+//             }
+//         })
+//     }
+// }
+
+// router.post('/dashboard', varifyUser, (req, res) => {
+//     res.json("Success")
+// })
 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
@@ -56,15 +58,8 @@ router.post('/login', async (req, res) => {
             if (user) {
                 bcrypt.compare(password, user.password, (err, response) => {
                     if (response) {
-                        const token = jwt.sign({ email: user.email, role: user.role },
-                            "jwt-secret-key", { expiresIn: '1d' })
-
-                        res.cookie('token', token)
-                        console.log(user._id)
-                        req.session.cookie.path = user._id
-                        // req.session.userId = user._id
-                        // console.log(req.session.cookie)
-                        return res.status(200).json({ Status: "Success", token, role: user.role, email })
+                        token = jwt.sign({ email: user.email, role: user.role }, "jwt-secret-key")
+                        return res.status(200).json({ Status: "Success", token, user, email })
                     } else {
                         return res.status(500).json("The password is incorrect")
                     }
@@ -90,6 +85,11 @@ router.get('/user/:id', async (req, res) => {
     const user = await userModel.findOne({});
     // res.json(user)
     console.log(user)
+})
+
+router.get('/login', async (req, res) => {
+    // console.log(token)
+    res.json(token);
 })
 
 module.exports = router
