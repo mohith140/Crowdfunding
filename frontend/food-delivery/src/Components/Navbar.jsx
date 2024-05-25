@@ -1,9 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
 function Navbar() {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -19,6 +25,12 @@ function Navbar() {
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/cart">Cart</Link>
+                        </li>
+                        <li className="nav-item">
+                            <span className="nav-link">Welcome, {user.username}!</span>
+                        </li>
+                        <li className="nav-item">
+                            <button className="btn btn-link nav-link" onClick={handleLogout}>Logout</button>
                         </li>
                     </ul>
                 </div>

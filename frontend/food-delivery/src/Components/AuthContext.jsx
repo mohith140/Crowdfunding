@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { useContext, createContext, useState } from 'react';
+import React, { useEffect, useContext, createContext, useState } from 'react';
 
 const AuthContext = createContext();
 
@@ -9,9 +8,15 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        setToken(localStorage.getItem('token'))
-        setRole(localStorage.getItem('role'))
-    }, [])
+        const storedToken = localStorage.getItem('token');
+        const storedRole = localStorage.getItem('role');
+        console.log(storedRole, storedToken);
+
+        if (storedToken && storedRole) {
+            setToken(storedToken);
+            setRole(storedRole);
+        }
+    }, []);
 
     const loginAction = async (data) => {
         try {
@@ -23,31 +28,37 @@ const AuthProvider = ({ children }) => {
                 body: JSON.stringify(data),
             });
             const responseData = await response.json();
-            // console.log(responseData)
-            if (responseData) {
+            if (response.ok) {
                 setToken(responseData.token);
-                setRole(responseData.user.role);
-                setUser(responseData.user)
-                console.log(responseData.user)
-                localStorage.setItem('token', responseData.token)
-                localStorage.setItem('role', responseData.user.role)
-                return responseData.user
+                setRole(responseData.role);
+                setUser(responseData.user);
+                localStorage.setItem('token', responseData.token);
+                localStorage.setItem('role', responseData.user.role);
+                return responseData.user;
             }
-            throw new Error(response.message);
+            throw new Error(responseData.message);
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
     };
 
+    const logout = () => {
+        setToken("");
+        setRole("");
+        setUser(null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+    };
+
     return (
-        <AuthContext.Provider value={{ token, user, role, loginAction }}>
+        <AuthContext.Provider value={{ token, user, role, loginAction, logout }}>
             {children}
         </AuthContext.Provider>
-    )
-}
+    );
+};
 
 export default AuthProvider;
 
 export const useAuth = () => {
-    return useContext(AuthContext)
+    return useContext(AuthContext);
 };
