@@ -38,6 +38,7 @@ import AuthProvider from './Components/AuthContext';
 import UserProtected from './routes/UserProtected';
 import AdminProtected from './routes/AdminProtected';
 import Profile from './Components/Profile';
+import UserOrders from './Components/UserOrders';
 
 function App() {
   return (
@@ -59,6 +60,7 @@ function App() {
                   <Route path='/user/restaurants' element={<UserRestaurants />} />
                   <Route path='/user/restaurants/:id/menu' element={<UserRestaurantMenu />} />
                   <Route path='/user/profile' element={<Profile />} />
+                  <Route path='/user/orders' element={<UserOrders />} />
                 </Route>
                 <Route path='*' element={<Login />} />
               </Routes>

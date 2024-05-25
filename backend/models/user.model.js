@@ -22,7 +22,8 @@ const userSchema = mongoose.Schema({
     },
     role: {
         type: String,
-        required: true
+        required: true,
+        default: "Customer"
     },
     orders: Array
 });

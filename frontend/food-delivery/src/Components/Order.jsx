@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './CSS/Orders.css';
+import { Link } from 'react-router-dom';
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
+    const [updatedStatus, setUpdatedStatus] = useState(null);
 
     useEffect(() => {
         fetchOrders();
-    }, []);
+    }, [updatedStatus]);
 
     const fetchOrders = async () => {
         try {
@@ -19,15 +21,41 @@ const Orders = () => {
         }
     };
 
-    const handleStatus = async (id) => {
-        await fetch(`http://localhost:5000/api/admin/orders/${id}`, {
-            method: 'DELETE'
-        })
-        fetchOrders()
-    }
+    const handleStatus = async (id, status) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/admin/orders/${id}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status })
+            });
+            if (response.ok) {
+                setUpdatedStatus(status);
+            } else {
+                console.error('Failed to update status');
+            }
+        } catch (error) {
+            console.error('Error updating status:', error);
+        }
+    };
 
     return (
-        <div className="orders-container">
+        <div className="orders-container">{/* Sidebar */}
+            <div className="bg-primary sidebar text-white p-3">
+                <h3 className="text-center mb-4">Quick Bite</h3>
+                <ul className="nav flex-column">
+                    <li className="nav-item mb-2">
+                        <Link to="/dashboard" className="nav-link text-white">Dashboard</Link>
+                    </li>
+                    <li className="nav-item mb-2">
+                        <Link to="/orders" className="nav-link text-white">Orders</Link>
+                    </li>
+                    <li className="nav-item mb-2">
+                        <Link to="/restaurants" className="nav-link text-white">Restaurants</Link>
+                    </li>
+                </ul>
+            </div>
             <h2 className="orders-heading">Orders</h2>
             {orders.map(order => (
                 <div className="card order-card" key={order.orderId}>
@@ -39,9 +67,9 @@ const Orders = () => {
                     </div>
                     <div className="card-body order-card-body">
                         <div className="order-details mb-3">
-                            <p><strong>Customer:</strong> {order.customerName}</p>
-                            <p><strong>Address:</strong> {order.customerAddress}</p>
-                            <p><strong>Phone:</strong> {order.customerPhone}</p>
+                            <p><strong>Customer:</strong> {order.userId.username}</p>
+                            <p><strong>Email Address:</strong> {order.userId.email}</p>
+                            <p><strong>Phone:</strong> {order.userId.mobileNumber}</p>
                             <p><strong>Restaurant ID:</strong> {order.restaurantId}</p>
                             <p><strong>Items:</strong></p>
                             <ul>
@@ -51,12 +79,10 @@ const Orders = () => {
                             </ul>
                             <p><strong>Total:</strong> ₹{order.totalPrice}</p>
                         </div>
-                        {
-                            <div>
-                                <button className="btn btn-success" onClick={() => handleStatus(order.orderId)}>Completed</button>
-                                <button className="btn btn-primary">Cancel</button>
-                            </div>
-                        }
+                        <div>
+                            <button className="btn btn-success" onClick={() => handleStatus(order.orderId, 'completed')}>Completed</button>
+                            <button className="btn btn-primary" onClick={() => handleStatus(order.orderId, 'cancelled')}>Cancel</button>
+                        </div>
                     </div>
                 </div>
             ))}

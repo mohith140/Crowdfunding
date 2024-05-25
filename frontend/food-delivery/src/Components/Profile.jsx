@@ -31,16 +31,12 @@ function Profile() {
                         <div className="profile-details">
                             <h4>Personal Information</h4>
                             <p><strong>Email:</strong> {profile.email}</p>
-                            <p><strong>Phone:</strong> {profile.phone}</p>
+                            <p><strong>Phone:</strong> {profile.mobileNumber}</p>
                         </div>
-                        <div className="profile-address">
+                        {/* <div className="profile-address">
                             <h4>Address</h4>
                             <p>{profile.address}</p>
-                        </div>
-                        <div className="profile-orders">
-                            <h4>Order History</h4>
-                            <p>{profile.orderHistory ? profile.orderHistory.join(', ') : 'No orders yet'}</p>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

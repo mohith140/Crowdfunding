@@ -1,12 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './CSS/AdminDashboard.css';
 import { useAuth } from './AuthContext';
 
 const AdminDashboard = () => {
-    const { user } = useAuth();
-    // console.log(user)
+    const { user, logout } = useAuth();
+    const [completed, setCompleted] = useState('');
+    const [cancelled, setCancelled] = useState('');
+    const [newOrders, setNewOrders] = useState('');
+    const [pendingRequests, setPendingRequests] = useState('');
+
+    useEffect(() => {
+        fetchDashboardData();
+    }, []);
+
+    const fetchDashboardData = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/orders');
+            const data = await response.json();
+            console.log(data)
+            const preq = data.filter(data => data.status === 'pending');
+            const creq = data.filter(data => data.status === 'completed');
+            const cnreq = data.filter(data => data.status === 'cancelled');
+            setCompleted(creq.length);
+            setCancelled(cnreq.length);
+            setNewOrders(data.length);
+            setPendingRequests(preq.length);
+        } catch (error) {
+            console.error('Error fetching dashboard data:', error);
+        }
+    };
+
+    const handleLogout = () => {
+        logout();
+    };
+
     return (
         <div className="admin-dashboard">
             <div id="wrapper" className="d-flex">
@@ -22,6 +51,9 @@ const AdminDashboard = () => {
                         </li>
                         <li className="nav-item mb-2">
                             <Link to="/restaurants" className="nav-link text-white">Restaurants</Link>
+                        </li>
+                        <li className="nav-item mb-2">
+                            <button className="nav-link text-white btn btn-link" onClick={handleLogout}>Logout</button>
                         </li>
                     </ul>
                 </div>
@@ -44,13 +76,13 @@ const AdminDashboard = () => {
                                     <div className="card-body">
                                         <div className="row no-gutters align-items-center">
                                             <div className="col mr-2">
-                                                <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                    Earnings (Monthly)
+                                                <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                    Completed
                                                 </div>
-                                                <div className="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                                <div className="h5 mb-0 font-weight-bold text-gray-800">{completed}</div>
                                             </div>
                                             <div className="col-auto">
-                                                <i className="fas fa-calendar fa-2x text-gray-300"></i>
+                                                <i className="fas fa-check-circle fa-2x text-success"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -63,13 +95,13 @@ const AdminDashboard = () => {
                                     <div className="card-body">
                                         <div className="row no-gutters align-items-center">
                                             <div className="col mr-2">
-                                                <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                    Earnings (Annual)
+                                                <div className="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                                    Cancelled
                                                 </div>
-                                                <div className="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                                <div className="h5 mb-0 font-weight-bold text-gray-800">{cancelled}</div>
                                             </div>
                                             <div className="col-auto">
-                                                <i className="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                                <i className="fas fa-times-circle fa-2x text-danger"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -83,9 +115,9 @@ const AdminDashboard = () => {
                                         <div className="row no-gutters align-items-center">
                                             <div className="col mr-2">
                                                 <div className="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                    New Orders
+                                                    Total Orders
                                                 </div>
-                                                <div className="h5 mb-0 font-weight-bold text-gray-800">124</div>
+                                                <div className="h5 mb-0 font-weight-bold text-gray-800">{newOrders}</div>
                                             </div>
                                             <div className="col-auto">
                                                 <i className="fas fa-clipboard-list fa-2x text-gray-300"></i>
@@ -104,41 +136,11 @@ const AdminDashboard = () => {
                                                 <div className="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                     Pending Requests
                                                 </div>
-                                                <div className="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                                <div className="h5 mb-0 font-weight-bold text-gray-800">{pendingRequests}</div>
                                             </div>
                                             <div className="col-auto">
                                                 <i className="fas fa-comments fa-2x text-gray-300"></i>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="row">
-                            {/* Area Chart */}
-                            <div className="col-xl-8 col-lg-7">
-                                <div className="card shadow mb-4">
-                                    <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 className="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="chart-area">
-                                            <canvas id="myAreaChart"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Pie Chart */}
-                            <div className="col-xl-4 col-lg-5">
-                                <div className="card shadow mb-4">
-                                    <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 className="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="chart-pie pt-4 pb-2">
-                                            <canvas id="myPieChart"></canvas>
                                         </div>
                                     </div>
                                 </div>

@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import { v4 as uuidv4 } from 'uuid';  // Import uuid library for generating unique order IDs
 import './CSS/UserRestaurantList.css'; // Import custom CSS for navbar styling
+import { useAuth } from './AuthContext';
 
 function UserRestaurantMenu() {
     const [menus, setMenus] = useState([]);
     const [name, setName] = useState('');
     const [cart, setCart] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [restaurantId, setRestaurantId] = useState('');
 
     const params = useParams();
+    const auth = useAuth();
+    let userId = auth.user;
 
     useEffect(() => {
         fetchMenus();
@@ -42,6 +46,7 @@ function UserRestaurantMenu() {
     };
 
     const addToCart = (item) => {
+        setRestaurantId(item.restaurantId)
         setCart(prevCart => {
             const existingItemIndex = prevCart.findIndex(cartItem => cartItem.itemId === item.itemId);
             if (existingItemIndex >= 0) {
@@ -66,22 +71,29 @@ function UserRestaurantMenu() {
 
     const placeOrder = async () => {
         const orderId = uuidv4();  // Generate a unique order ID using uuid
-        const totalPrice = getTotalPrice()
+        const totalPrice = getTotalPrice();
+        const date = new Date();  // Ensure date is in ISO string format
+        console.log(date);
+
         try {
             const response = await fetch('http://localhost:5000/api/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ orderId, items: cart, totalPrice }),
+                body: JSON.stringify({ orderId, items: cart, totalPrice, orderDate: date, restaurantId, userId }),
             });
             const result = await response.json();
+            console.log(result);
             alert('Order placed successfully!');
             setCart([]);
         } catch (error) {
             console.error('Error placing order:', error);
         }
     };
+
+
+
 
     const filteredMenus = menus.filter(menu =>
         menu.name.toLowerCase().includes(searchTerm.toLowerCase())

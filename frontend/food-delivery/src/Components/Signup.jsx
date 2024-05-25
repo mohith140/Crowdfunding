@@ -71,16 +71,6 @@ function Signup() {
                         onChange={handleChange}
                         className="input"
                     />
-                    <select
-                        name="role"
-                        value={formData.role}
-                        onChange={handleChange}
-                        className="input"
-                    >
-                        <option value="">Select Role</option>
-                        <option value="Customer">Customer</option>
-                        <option value="Admin">Admin</option>
-                    </select>
                     <button type="submit" className="button">Sign Up</button>
                 </form>
             </div>

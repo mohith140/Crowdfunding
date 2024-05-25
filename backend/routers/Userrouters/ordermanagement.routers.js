@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 
 // POST endpoint to create a new order
 router.post('/', async (req, res) => {
-    const { orderId, userId, restaurantId, items, totalPrice } = req.body;
+    const { orderId, userId, restaurantId, items, totalPrice, orderDate } = req.body;
 
     try {
         const newOrder = await orderModel.create({
@@ -24,13 +24,34 @@ router.post('/', async (req, res) => {
             restaurantId,
             items,
             totalPrice,
-            status: "pending",
-            date: new Date() // Ensure the date field is properly set
+            status: 'pending',  // Default value defined in the schema
+            orderDate  // This will be taken from req.body or default to Date.now if not provided
         });
 
         res.status(201).json(newOrder);
     } catch (error) {
         res.status(500).json({ message: 'Error creating order', error: error.message });
+    }
+});
+
+router.put('/:orderId', async (req, res) => {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    try {
+        const updatedOrder = await orderModel.findOneAndUpdate(
+            { orderId },
+            { status },
+            { new: true }
+        );
+
+        if (!updatedOrder) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        res.status(200).json(updatedOrder);
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating order', error: error.message });
     }
 });
 

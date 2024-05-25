@@ -24,13 +24,10 @@ function Navbar() {
                             <Link className="nav-link" to="/user/profile">Profile</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/cart">Cart</Link>
+                            <Link className="nav-link" to="/user/orders">My Orders</Link>
                         </li>
                         <li className="nav-item">
-                            <span className="nav-link">Welcome, {user.username}!</span>
-                        </li>
-                        <li className="nav-item">
-                            <button className="btn btn-link nav-link" onClick={handleLogout}>Logout</button>
+                            <Link className="btn btn-link nav-link" onClick={handleLogout}>Logout</Link>
                         </li>
                     </ul>
                 </div>

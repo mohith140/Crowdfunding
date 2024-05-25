@@ -3,7 +3,7 @@ import { useAuth } from '../Components/AuthContext';
 import { Outlet, Navigate } from 'react-router-dom';
 
 const UserProtected = () => {
-    const { user, token, role } = useAuth();
+    const { user, token } = useAuth();
     // console.log(role)
     if (!token || user.role !== "Customer") {
         return <Navigate to="/login" />

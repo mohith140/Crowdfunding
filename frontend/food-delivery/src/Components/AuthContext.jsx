@@ -10,7 +10,7 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
         const storedRole = localStorage.getItem('role');
-        console.log(storedRole, storedToken);
+        // console.log(storedRole, storedToken);
 
         if (storedToken && storedRole) {
             setToken(storedToken);
