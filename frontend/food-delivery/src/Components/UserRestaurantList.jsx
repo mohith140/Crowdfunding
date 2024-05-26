@@ -40,7 +40,6 @@ function UserRestaurantList() {
             <Navbar />
             <div className="container-fluid mt-5">
                 <h2 className="text-center mb-4">Welcome, {user.username}!</h2>
-                <h2 className="text-center mb-4">Featured Restaurants</h2>
                 <div className="d-flex justify-content-center mb-4">
                     <input
                         type="text"
@@ -50,6 +49,7 @@ function UserRestaurantList() {
                         onChange={handleSearchChange}
                     />
                 </div>
+                <h2 className="text-center mb-4">Featured Restaurants</h2>
                 <Carousel>
                     {featuredRestaurants.map(restaurant => (
                         <Carousel.Item key={restaurant.restaurantId}>
@@ -65,7 +65,7 @@ function UserRestaurantList() {
                         </Carousel.Item>
                     ))}
                 </Carousel>
-                <h2 className="text-center mb-4">Restaurants</h2>
+                <h2 className="text-center mb-4 mt-4">Restaurants</h2>
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-5">
                     {filteredRestaurants.map(restaurant => (
                         <div className="col mb-4" key={restaurant.restaurantId}>

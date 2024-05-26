@@ -3,10 +3,13 @@ import { Card, Button, ListGroup, Row, Col, Alert } from 'react-bootstrap';
 import { FaCheckCircle, FaClock, FaTimesCircle } from 'react-icons/fa';
 import './CSS/UserOrders.css';
 import Navbar from './Navbar';
+import { useAuth } from './AuthContext';
+import { v4 as uuidv4 } from 'uuid';  // Import uuid library for generating unique order IDs
 
 const UserOrders = () => {
     const [orders, setOrders] = useState([]);
     const [message, setMessage] = useState(null);
+    const { user } = useAuth();
 
     useEffect(() => {
         fetchOrders();
@@ -30,12 +33,16 @@ const UserOrders = () => {
                 return <FaClock className="text-warning" />;
             case 'cancelled':
                 return <FaTimesCircle className="text-danger" />;
+            case 'accepted':
+                return <FaCheckCircle className="text-primary" />;
             default:
                 return <FaClock className="text-warning" />;
         }
     };
 
     const handleReorder = async (order) => {
+        const orderId = uuidv4();  // Generate a unique order ID using uuid
+        const date = new Date();  // Ensure date is in ISO string format
         try {
             const response = await fetch('http://localhost:5000/api/orders', {
                 method: 'POST',
@@ -43,8 +50,12 @@ const UserOrders = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    orderId,
                     items: order.items,
                     totalPrice: order.totalPrice,
+                    orderDate: date,
+                    restaurantId: order.restaurantId,
+                    userId: user
                 }),
             });
 
@@ -129,7 +140,7 @@ const UserOrders = () => {
                                             <Button variant="primary" onClick={() => handleReorder(order)} disabled={order.status !== 'completed'}>
                                                 Reorder
                                             </Button>
-                                            <Button variant="danger" onClick={() => handleCancelOrder(order.orderId)} disabled={order.status !== 'pending'}>
+                                            <Button variant="danger" onClick={() => handleCancelOrder(order.orderId)} disabled={order.status !== 'pending' && order.status !== 'accepted'}>
                                                 Cancel Order
                                             </Button>
                                         </div>

@@ -10,6 +10,7 @@ const AdminDashboard = () => {
     const [cancelled, setCancelled] = useState('');
     const [newOrders, setNewOrders] = useState('');
     const [pendingRequests, setPendingRequests] = useState('');
+    const [acceptedRequests, setAcceptedRequests] = useState('');
 
     useEffect(() => {
         fetchDashboardData();
@@ -23,10 +24,12 @@ const AdminDashboard = () => {
             const preq = data.filter(data => data.status === 'pending');
             const creq = data.filter(data => data.status === 'completed');
             const cnreq = data.filter(data => data.status === 'cancelled');
+            const areq = data.filter(data => data.status === 'accepted');
             setCompleted(creq.length);
             setCancelled(cnreq.length);
             setNewOrders(data.length);
             setPendingRequests(preq.length);
+            setAcceptedRequests(areq.length);
         } catch (error) {
             console.error('Error fetching dashboard data:', error);
         }
@@ -70,7 +73,6 @@ const AdminDashboard = () => {
                         </div>
 
                         <div className="row">
-                            {/* Earnings (Monthly) Card */}
                             <div className="col-xl-3 col-md-6 mb-4">
                                 <div className="card border-left-primary shadow h-100 py-2">
                                     <div className="card-body">
@@ -89,7 +91,6 @@ const AdminDashboard = () => {
                                 </div>
                             </div>
 
-                            {/* Earnings (Annual) Card */}
                             <div className="col-xl-3 col-md-6 mb-4">
                                 <div className="card border-left-success shadow h-100 py-2">
                                     <div className="card-body">
@@ -140,6 +141,23 @@ const AdminDashboard = () => {
                                             </div>
                                             <div className="col-auto">
                                                 <i className="fas fa-comments fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-xl-3 col-md-6 mb-4">
+                                <div className="card border-left-warning shadow h-100 py-2">
+                                    <div className="card-body">
+                                        <div className="row no-gutters align-items-center">
+                                            <div className="col mr-2">
+                                                <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Accepted Requests
+                                                </div>
+                                                <div className="h5 mb-0 font-weight-bold text-gray-800">{acceptedRequests}</div>
+                                            </div>
+                                            <div className="col-auto">
+                                                <i className="fas fa-check-circle fa-2x text-primary"></i>
                                             </div>
                                         </div>
                                     </div>

@@ -73,7 +73,7 @@ function UserRestaurantMenu() {
         const orderId = uuidv4();  // Generate a unique order ID using uuid
         const totalPrice = getTotalPrice();
         const date = new Date();  // Ensure date is in ISO string format
-        console.log(date);
+        // console.log(date);
 
         try {
             const response = await fetch('http://localhost:5000/api/orders', {

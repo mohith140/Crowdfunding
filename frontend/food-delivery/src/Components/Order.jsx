@@ -80,8 +80,9 @@ const Orders = () => {
                             <p><strong>Total:</strong> ₹{order.totalPrice}</p>
                         </div>
                         <div>
-                            <button className="btn btn-success" onClick={() => handleStatus(order.orderId, 'completed')}>Completed</button>
-                            <button className="btn btn-primary" onClick={() => handleStatus(order.orderId, 'cancelled')}>Cancel</button>
+                            <button className="btn btn-primary" onClick={() => handleStatus(order.orderId, 'accepted')} disabled={order.status === 'cancelled' || order.status === 'completed'}>Accept</button>
+                            <button className="btn btn-success" onClick={() => handleStatus(order.orderId, 'completed')} disabled={order.status === 'cancelled'}>Completed</button>
+                            <button className="btn btn-danger" onClick={() => handleStatus(order.orderId, 'cancelled')} disabled={order.status === 'completed'}>Cancel</button>
                         </div>
                     </div>
                 </div>
