@@ -7,6 +7,7 @@ const RestaurantList = () => {
     const [restaurants, setRestaurants] = useState([]);
     const [currentRestaurantId, setCurrentRestaurantId] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [form, setForm] = useState({ id: '', name: '', address: '', phone: '' });
 
     const navigate = useNavigate();
 
@@ -24,36 +25,33 @@ const RestaurantList = () => {
         }
     };
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setForm({ ...form, [name]: value });
+    };
+
     const handleRestaurantSubmit = async (event) => {
         event.preventDefault();
-        const name = document.getElementById('name').value;
-        const address = document.getElementById('address').value;
-        const phone = document.getElementById('phone').value;
 
-        const restaurantData = { name, address, phone };
+        const restaurantData = { name: form.name, address: form.address, phone: form.phone };
 
         if (edit) {
             try {
                 await fetch(`http://localhost:5000/api/admin/restaurants/${currentRestaurantId}`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(restaurantData)
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(restaurantData),
                 });
             } catch (err) {
                 console.log('Error updating restaurant:', err);
             }
         } else {
-            const restaurantId = document.getElementById('id').value;
-            restaurantData.restaurantId = restaurantId;
+            restaurantData.restaurantId = form.id;
             try {
                 await fetch('http://localhost:5000/api/admin/restaurants', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(restaurantData)
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(restaurantData),
                 });
             } catch (err) {
                 console.log('Error adding new restaurant:', err);
@@ -67,7 +65,7 @@ const RestaurantList = () => {
     const handleDelete = async (id) => {
         try {
             await fetch(`http://localhost:5000/api/admin/restaurants/${id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
             });
             setRestaurants(restaurants.filter((restaurant) => restaurant.restaurantId !== id));
         } catch (error) {
@@ -77,10 +75,7 @@ const RestaurantList = () => {
 
     const editButton = (id) => {
         const restaurant = restaurants.find((rest) => rest.restaurantId === id);
-        document.getElementById('name').value = restaurant.name;
-        document.getElementById('address').value = restaurant.address;
-        document.getElementById('phone').value = restaurant.phone;
-
+        setForm({ id: restaurant.restaurantId, name: restaurant.name, address: restaurant.address, phone: restaurant.phone });
         setEdit(true);
         setCurrentRestaurantId(id);
     };
@@ -92,15 +87,11 @@ const RestaurantList = () => {
     const resetForm = () => {
         setEdit(false);
         setCurrentRestaurantId(null);
-        document.getElementById('restaurantForm').reset();
+        setForm({ id: '', name: '', address: '', phone: '' });
     };
 
     const showMenu = (id) => {
         navigate(`/${id}/menu`);
-    };
-
-    const goBack = () => {
-        navigate(-1);
     };
 
     const handleSearchChange = (event) => {
@@ -113,7 +104,6 @@ const RestaurantList = () => {
 
     return (
         <div className="restaurant-list-container">
-            {/* Sidebar */}
             <div className="bg-primary sidebar text-white p-3">
                 <h3 className="text-center mb-4">Quick Bite</h3>
                 <ul className="nav flex-column">
@@ -128,14 +118,50 @@ const RestaurantList = () => {
                     </li>
                 </ul>
             </div>
-            {/* Content Wrapper */}
             <div id="content-wrapper1" className="flex-grow-1 d-flex flex-column">
                 <h2 className="restaurant-list-heading">Restaurants List</h2>
                 <form id="restaurantForm" onSubmit={handleRestaurantSubmit}>
-                    {!edit && <input id="id" className="form-control" type="text" placeholder="Enter Restaurant ID" />}
-                    <input id="name" className="form-control" type="text" placeholder="Enter Restaurant Name" required />
-                    <input id="address" className="form-control" type="text" placeholder="Enter Restaurant Address" required />
-                    <input id="phone" className="form-control" type="text" placeholder="Enter Restaurant Phone" required />
+                    {!edit && (
+                        <input
+                            id="id"
+                            name="id"
+                            className="form-control"
+                            type="text"
+                            placeholder="Enter Restaurant ID"
+                            value={form.id}
+                            onChange={handleInputChange}
+                        />
+                    )}
+                    <input
+                        id="name"
+                        name="name"
+                        className="form-control"
+                        type="text"
+                        placeholder="Enter Restaurant Name"
+                        value={form.name}
+                        onChange={handleInputChange}
+                        required
+                    />
+                    <input
+                        id="address"
+                        name="address"
+                        className="form-control"
+                        type="text"
+                        placeholder="Enter Restaurant Address"
+                        value={form.address}
+                        onChange={handleInputChange}
+                        required
+                    />
+                    <input
+                        id="phone"
+                        name="phone"
+                        className="form-control"
+                        type="text"
+                        placeholder="Enter Restaurant Phone"
+                        value={form.phone}
+                        onChange={handleInputChange}
+                        required
+                    />
                     <button type="submit">
                         {edit ? 'Edit Restaurant' : 'Add Restaurant'}
                     </button>

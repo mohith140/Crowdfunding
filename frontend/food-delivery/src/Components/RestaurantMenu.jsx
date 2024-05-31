@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import './CSS/RestaurantList.css'
+import './CSS/RestaurantList.css';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 
 const RestaurantMenu = () => {
     const [edit, setEdit] = useState(false);
     const [menus, setMenus] = useState([]);
     const [currentMenuId, setCurrentMenuId] = useState(null);
-    const [name, setName] = useState('');
+    const [menuForm, setMenuForm] = useState({ id: '', name: '', price: '', description: '' });
     const [searchQuery, setSearchQuery] = useState('');
+    const [name, setName] = useState('');
 
     const params = useParams();
     const navigate = useNavigate();
@@ -37,36 +38,33 @@ const RestaurantMenu = () => {
         }
     };
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setMenuForm({ ...menuForm, [name]: value });
+    };
+
     const handleMenuSubmit = async (event) => {
         event.preventDefault();
-        const name = document.getElementById('name').value;
-        const price = document.getElementById('price').value;
-        const description = document.getElementById('desc').value;
 
-        const menuData = { name, price, description };
+        const menuData = { name: menuForm.name, price: menuForm.price, description: menuForm.description };
 
         if (edit) {
             try {
                 await fetch(`http://localhost:5000/api/admin/restaurants/${params.id}/menu/${currentMenuId}`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(menuData),
                 });
             } catch (err) {
                 console.log('Error updating menu:', err);
             }
         } else {
-            const itemId = document.getElementById('id').value;
-            menuData.itemId = itemId;
+            menuData.itemId = menuForm.id;
             menuData.restaurantId = params.id;
             try {
                 await fetch(`http://localhost:5000/api/admin/restaurants/${params.id}/menu`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(menuData),
                 });
             } catch (err) {
@@ -89,17 +87,9 @@ const RestaurantMenu = () => {
         }
     };
 
-    const resetForm = () => {
-        setEdit(false);
-        setCurrentMenuId(null);
-        document.getElementById('menuForm').reset();
-    };
-
     const editButton = (id) => {
         const menu = menus.find((menu) => menu.itemId === id);
-        document.getElementById('name').value = menu.name;
-        document.getElementById('price').value = menu.price;
-        document.getElementById('desc').value = menu.description;
+        setMenuForm({ id: menu.itemId, name: menu.name, price: menu.price, description: menu.description });
 
         setEdit(true);
         setCurrentMenuId(id);
@@ -107,6 +97,12 @@ const RestaurantMenu = () => {
 
     const cancelEdit = () => {
         resetForm();
+    };
+
+    const resetForm = () => {
+        setEdit(false);
+        setCurrentMenuId(null);
+        setMenuForm({ id: '', name: '', price: '', description: '' });
     };
 
     const goBack = () => {
@@ -143,10 +139,48 @@ const RestaurantMenu = () => {
             <div id="content-wrapper1" className="flex-grow-1 d-flex flex-column">
                 <h2 className="restaurant-menu-heading">{name}'s Menu List</h2>
                 <form id="menuForm" onSubmit={handleMenuSubmit}>
-                    {!edit && <input id="id" className="form-control" type="text" placeholder="Enter Menu ID" />}
-                    <input id="name" className="form-control" type="text" placeholder="Enter Item Name" required />
-                    <input id="price" className="form-control" type="number" step="0.01" placeholder="Enter Item Price" required />
-                    <input id="desc" className="form-control" type="text" placeholder="Enter Item Description" required />
+                    {!edit && (
+                        <input
+                            id="id"
+                            name="id"
+                            className="form-control"
+                            type="text"
+                            placeholder="Enter Menu ID"
+                            value={menuForm.id}
+                            onChange={handleInputChange}
+                        />
+                    )}
+                    <input
+                        id="name"
+                        name="name"
+                        className="form-control"
+                        type="text"
+                        placeholder="Enter Item Name"
+                        value={menuForm.name}
+                        onChange={handleInputChange}
+                        required
+                    />
+                    <input
+                        id="price"
+                        name="price"
+                        className="form-control"
+                        type="number"
+                        step="0.01"
+                        placeholder="Enter Item Price"
+                        value={menuForm.price}
+                        onChange={handleInputChange}
+                        required
+                    />
+                    <input
+                        id="description"
+                        name="description"
+                        className="form-control"
+                        type="text"
+                        placeholder="Enter Item Description"
+                        value={menuForm.description}
+                        onChange={handleInputChange}
+                        required
+                    />
                     <button type="submit">
                         {edit ? 'Edit Item' : 'Add Item'}
                     </button>

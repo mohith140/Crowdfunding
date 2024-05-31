@@ -27,7 +27,7 @@ function UserRestaurantMenu() {
             const data = await response.json();
             setName(data.name);
         } catch (err) {
-            console.log(err.message);
+            console.log('Error fetching restaurant name:', err);
         }
     };
 
@@ -37,7 +37,7 @@ function UserRestaurantMenu() {
             const data = await response.json();
             setMenus(data);
         } catch (error) {
-            console.error('Error fetching restaurants:', error);
+            console.error('Error fetching menus:', error);
         }
     };
 
@@ -46,7 +46,7 @@ function UserRestaurantMenu() {
     };
 
     const addToCart = (item) => {
-        setRestaurantId(item.restaurantId)
+        setRestaurantId(item.restaurantId);
         setCart(prevCart => {
             const existingItemIndex = prevCart.findIndex(cartItem => cartItem.itemId === item.itemId);
             if (existingItemIndex >= 0) {
@@ -72,8 +72,7 @@ function UserRestaurantMenu() {
     const placeOrder = async () => {
         const orderId = uuidv4();  // Generate a unique order ID using uuid
         const totalPrice = getTotalPrice();
-        const date = new Date();  // Ensure date is in ISO string format
-        // console.log(date);
+        const orderDate = new Date().toISOString();  // Ensure date is in ISO string format
 
         try {
             const response = await fetch('http://localhost:5000/api/orders', {
@@ -81,7 +80,7 @@ function UserRestaurantMenu() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ orderId, items: cart, totalPrice, orderDate: date, restaurantId, userId }),
+                body: JSON.stringify({ orderId, items: cart, totalPrice, orderDate, restaurantId, userId }),
             });
             const result = await response.json();
             console.log(result);
@@ -91,9 +90,6 @@ function UserRestaurantMenu() {
             console.error('Error placing order:', error);
         }
     };
-
-
-
 
     const filteredMenus = menus.filter(menu =>
         menu.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -105,7 +101,6 @@ function UserRestaurantMenu() {
 
     return (
         <>
-
             <Navbar />
             <div className="container-fluid mt-5">
                 <h2 className="text-center mb-4">{name}'s Menu</h2>
