@@ -16,7 +16,7 @@ const RestaurantMenu = () => {
     useEffect(() => {
         fetchMenus();
         fetchName();
-    }, []);
+    });
 
     const fetchName = async () => {
         try {
