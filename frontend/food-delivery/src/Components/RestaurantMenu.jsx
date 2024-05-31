@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './CSS/RestaurantList.css';
+import './CSS/RestaurantList.css'
 import { useParams, useNavigate, Link } from 'react-router-dom';
 
 const RestaurantMenu = () => {
@@ -7,6 +7,7 @@ const RestaurantMenu = () => {
     const [menus, setMenus] = useState([]);
     const [currentMenuId, setCurrentMenuId] = useState(null);
     const [name, setName] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
 
     const params = useParams();
     const navigate = useNavigate();
@@ -112,8 +113,16 @@ const RestaurantMenu = () => {
         navigate(-1);
     };
 
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const filteredMenus = menus.filter((menu) =>
+        menu.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
-        <div className="restaurant-list-container">
+        <div className="restaurant-menu-container">
             {/* Sidebar */}
             <div className="bg-primary sidebar text-white p-3">
                 <h3 className="text-center mb-4">Quick Bite</h3>
@@ -132,7 +141,7 @@ const RestaurantMenu = () => {
 
             {/* Content Wrapper */}
             <div id="content-wrapper1" className="flex-grow-1 d-flex flex-column">
-                <h2 className="restaurant-list-heading">{name}'s Menu List</h2>
+                <h2 className="restaurant-menu-heading">{name}'s Menu List</h2>
                 <form id="menuForm" onSubmit={handleMenuSubmit}>
                     {!edit && <input id="id" className="form-control" type="text" placeholder="Enter Menu ID" />}
                     <input id="name" className="form-control" type="text" placeholder="Enter Item Name" required />
@@ -147,6 +156,16 @@ const RestaurantMenu = () => {
                     <button type="button" className="back-button" onClick={goBack}>Go Back</button>
                 </form>
                 <br />
+                <div className="search-bar">
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Search by item name"
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                    />
+                </div>
+                <br />
                 <table className="restaurant-table">
                     <thead>
                         <tr>
@@ -158,7 +177,7 @@ const RestaurantMenu = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {menus.map((menu) => (
+                        {filteredMenus.map((menu) => (
                             <tr key={menu.itemId}>
                                 <td>{menu.itemId}</td>
                                 <td>{menu.name}</td>

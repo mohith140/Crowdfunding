@@ -6,6 +6,7 @@ const RestaurantList = () => {
     const [edit, setEdit] = useState(false);
     const [restaurants, setRestaurants] = useState([]);
     const [currentRestaurantId, setCurrentRestaurantId] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const navigate = useNavigate();
 
@@ -102,6 +103,14 @@ const RestaurantList = () => {
         navigate(-1);
     };
 
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const filteredRestaurants = restaurants.filter((restaurant) =>
+        restaurant.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div className="restaurant-list-container">
             {/* Sidebar */}
@@ -133,7 +142,16 @@ const RestaurantList = () => {
                     {edit && (
                         <button type="button" className="cancel-button" onClick={cancelEdit}>Cancel Edit</button>
                     )}
-                </form>
+                </form><br />
+                <div className="search-bar">
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Search by restaurant name"
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                    />
+                </div>
                 <table className="restaurant-table">
                     <thead>
                         <tr>
@@ -145,7 +163,7 @@ const RestaurantList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {restaurants.map((restaurant) => (
+                        {filteredRestaurants.map((restaurant) => (
                             <tr key={restaurant.restaurantId}>
                                 <td>{restaurant.restaurantId}</td>
                                 <td>{restaurant.name}</td>
