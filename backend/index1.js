@@ -1,5 +1,6 @@
 require('dotenv').config();
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
+const backend = process.env.BACKEND_SERVER;
 const cors = require('cors')
 
 const express = require('express');
@@ -18,7 +19,7 @@ const userauthentication = require('./routers/Userrouters/userauthentication.rou
 
 
 
-mongoose.connect("mongodb+srv://mohith1:mohith1@cluster0.knbt1jb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+mongoose.connect(backend)
     .then(console.log("Connected"))
     .catch(err => console.log(err));
 
