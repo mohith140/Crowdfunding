@@ -55,7 +55,7 @@ function UserRestaurantList() {
                         <Carousel.Item key={restaurant.restaurantId}>
                             <img
                                 className="d-block w-100"
-                                src={restaurant.image || 'https://source.unsplash.com/800x400/?food,indian'}
+                                src={restaurant.image || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836'}
                                 alt={restaurant.name}
                             />
                             <Carousel.Caption>
