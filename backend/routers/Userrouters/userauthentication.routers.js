@@ -16,7 +16,7 @@ router.use(session({
 
 
 router.use(cors({
-    origin: ["http://localhost:3000"],
+    origin: ["https://s-quick-bite.netlify.app"],
     methods: ["GET", "POST"],
     credentials: true
 }))
