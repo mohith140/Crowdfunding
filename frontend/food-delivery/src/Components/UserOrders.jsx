@@ -113,7 +113,7 @@ const UserOrders = () => {
             <Row className="justify-content-center">
                 <Col xs={12} md={10}>
                     <ListGroup>
-                        {orders.map(order => (
+                        {orders.slice(0).reverse().map(order => (
                             <ListGroup.Item key={order.orderId} className="mb-3">
                                 <Card className="order-card">
                                     <Card.Header className="d-flex justify-content-between align-items-center">
