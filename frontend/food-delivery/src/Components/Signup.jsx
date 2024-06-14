@@ -26,8 +26,12 @@ function Signup() {
             });
 
             const result = await response.json();
-            console.log(result);
-            navigate('/login');
+            if (result === true) {
+                console.log(result);
+                navigate('/login');
+            } else {
+                alert("Username or email already exists..")
+            }
         } catch (error) {
             alert(error)
             console.error('Error:', error);
