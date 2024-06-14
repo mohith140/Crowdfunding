@@ -39,7 +39,7 @@ const AuthProvider = ({ children }) => {
             throw new Error(responseData.message);
         } catch (err) {
             console.error(err);
-            alert("No record")
+            alert("No record or invalid credentials")
         }
     };
 
