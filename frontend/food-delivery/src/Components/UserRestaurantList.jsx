@@ -4,6 +4,7 @@ import { Carousel } from 'react-bootstrap';
 import Navbar from './Navbar';
 import './CSS/UserRestaurantList.css'; // Import custom CSS for navbar styling
 import { useAuth } from './AuthContext';
+import images from './loadImages'; // Import the images
 
 function UserRestaurantList() {
     const { user } = useAuth();
@@ -34,9 +35,14 @@ function UserRestaurantList() {
 
     const featuredRestaurants = restaurants.slice(0, 5); // Example: take the first 5 restaurants as featured
 
+    // Helper function to get an image by index or restaurant ID
+    const getImage = (index) => {
+        const imageKeys = Object.keys(images);
+        return images[imageKeys[index % imageKeys.length]]; // Cycle through images if more restaurants than images
+    };
+
     return (
         <>
-
             <Navbar />
             <div className="container-fluid mt-5">
                 <h2 className="text-center mb-4">Welcome, {user.username}!</h2>
@@ -51,11 +57,11 @@ function UserRestaurantList() {
                 </div>
                 <h2 className="text-center mb-4">Featured Restaurants</h2>
                 <Carousel>
-                    {featuredRestaurants.map(restaurant => (
+                    {featuredRestaurants.map((restaurant, index) => (
                         <Carousel.Item key={restaurant.restaurantId}>
                             <img
                                 className="d-block w-100"
-                                src={restaurant.image || 'https://unsplash.com/photos/photo-of-pub-set-in-room-during-daytime-poI7DelFiVA'}
+                                src={restaurant.image || getImage(index)}
                                 alt={restaurant.name}
                             />
                             <Carousel.Caption>
@@ -67,11 +73,11 @@ function UserRestaurantList() {
                 </Carousel>
                 <h2 className="text-center mb-4 mt-4">Restaurants</h2>
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-5">
-                    {filteredRestaurants.map(restaurant => (
+                    {filteredRestaurants.map((restaurant, index) => (
                         <div className="col mb-4" key={restaurant.restaurantId}>
                             <div className="card restaurant-card">
                                 <img
-                                    src={restaurant.image || 'https://source.unsplash.com/300x300/?food,indian'}
+                                    src={restaurant.image || getImage(index)}
                                     className="card-img"
                                     alt={restaurant.name}
                                 />
