@@ -16,7 +16,7 @@ router.use(session({
 
 
 router.use(cors({
-    origin: ["https://s-quick-bite.netlify.app"],
+    origin: ["https://localhost:3000"],
     methods: ["GET", "POST"],
     credentials: true
 }))
@@ -71,10 +71,10 @@ router.post('/login', async (req, res) => {
 })
 
 router.post('/signup', (req, res) => {
-    const { username, email, password, role, mobileNumber } = req.body;
+    const { username, email, password, mobileNumber } = req.body;
     bcrypt.hash(password, 10)
         .then(hash => {
-            userModel.create({ username, email, password: hash, role, mobileNumber })
+            userModel.create({ username, email, password: hash, mobileNumber })
                 .then(user => res.json(true))
                 .catch(err => res.json(err))
         }).catch(err => res.json(err))

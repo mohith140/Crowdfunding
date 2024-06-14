@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import './CSS/Login.css';
+import { ClipLoader } from 'react-spinners'; // Import the spinner
 import { useAuth } from './AuthContext';
+import './CSS/Login.css'; // Import custom styles
 
 function Login() {
     const [formData, setFormData] = useState({ email: '', password: '' });
+    const [loading, setLoading] = useState(false); // State for loading status
     const navigate = useNavigate();
     const auth = useAuth();
-
-    // useEffect(() => {
-    //     if (auth.token !== null && auth.role === "Customer")
-    //         navigate("/user/restaurants")
-    //     else if (auth.token !== null && auth.role === "Admin")
-    //         navigate("/dashboard")
-
-    // }, [auth.role])
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -23,8 +17,10 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true); // Start loading
         const user = await auth.loginAction(formData);
-        // console.log(user)
+        setLoading(false); // Stop loading
+
         if (user.role === "Admin") {
             navigate('/dashboard');
         } else if (user.role === "Customer") {
@@ -34,7 +30,12 @@ function Login() {
 
     return (
         <div className="background">
-            <div className="container">
+            {loading && (
+                <div className="loading-overlay">
+                    <ClipLoader size={50} color={"#123abc"} loading={loading} />
+                </div>
+            )}
+            <div className={`container ${loading ? 'blurred' : ''}`}>
                 <div className="nav">
                     <Link to="/signup" className="link">Sign Up</Link>
                     <Link to="/login" className="link">Log In</Link>

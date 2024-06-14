@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners'; // Import the spinner
 import './CSS/Signup.css';
 
 function Signup() {
     const [formData, setFormData] = useState({ username: '', email: '', password: '', mobileNumber: '', role: '' });
+    const [loading, setLoading] = useState(false); // State for loading status
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -13,6 +15,7 @@ function Signup() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true); // Start loading
         try {
             const response = await fetch('https://foodapp-0rh9.onrender.com/api/signup', {
                 method: 'POST',
@@ -22,17 +25,25 @@ function Signup() {
                 body: JSON.stringify(formData),
             });
 
-            const result = await response.text();
+            const result = await response.json();
             console.log(result);
             navigate('/login');
         } catch (error) {
+            alert(error)
             console.error('Error:', error);
+        } finally {
+            setLoading(false); // Stop loading
         }
     };
 
     return (
         <div className="background">
-            <div className="container">
+            {loading && (
+                <div className="loading-overlay">
+                    <ClipLoader size={50} color={"#123abc"} loading={loading} />
+                </div>
+            )}
+            <div className={`container ${loading ? 'blurred' : ''}`}>
                 <div className="nav">
                     <Link to="/signup" className="link">Sign Up</Link>
                     <Link to="/login" className="link">Log In</Link>
