@@ -20,7 +20,7 @@ const RestaurantMenu = () => {
 
     const fetchName = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/admin/restaurants/${params.id}`);
+            const response = await fetch(`https://foodapp-0rh9.onrender.com/api/admin/restaurants/${params.id}`);
             const data = await response.json();
             setName(data.name);
         } catch (err) {
@@ -30,7 +30,7 @@ const RestaurantMenu = () => {
 
     const fetchMenus = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/restaurants/${params.id}/menu`);
+            const response = await fetch(`https://foodapp-0rh9.onrender.com/api/restaurants/${params.id}/menu`);
             const data = await response.json();
             setMenus(data);
         } catch (error) {
@@ -50,7 +50,7 @@ const RestaurantMenu = () => {
 
         if (edit) {
             try {
-                await fetch(`http://localhost:5000/api/admin/restaurants/${params.id}/menu/${currentMenuId}`, {
+                await fetch(`https://foodapp-0rh9.onrender.com/api/admin/restaurants/${params.id}/menu/${currentMenuId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(menuData),
@@ -62,7 +62,7 @@ const RestaurantMenu = () => {
             menuData.itemId = menuForm.id;
             menuData.restaurantId = params.id;
             try {
-                await fetch(`http://localhost:5000/api/admin/restaurants/${params.id}/menu`, {
+                await fetch(`https://foodapp-0rh9.onrender.com/api/admin/restaurants/${params.id}/menu`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(menuData),
@@ -78,7 +78,7 @@ const RestaurantMenu = () => {
 
     const handleDelete = async (id) => {
         try {
-            await fetch(`http://localhost:5000/api/admin/restaurants/${params.id}/menu/${id}`, {
+            await fetch(`https://foodapp-0rh9.onrender.com/api/admin/restaurants/${params.id}/menu/${id}`, {
                 method: 'DELETE',
             });
             setMenus(menus.filter((menu) => menu.itemId !== id));

@@ -16,7 +16,7 @@ function UserRestaurantList() {
 
     const fetchRestaurants = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/restaurants');
+            const response = await fetch('https://foodapp-0rh9.onrender.com/api/restaurants');
             const data = await response.json();
             setRestaurants(data);
         } catch (error) {

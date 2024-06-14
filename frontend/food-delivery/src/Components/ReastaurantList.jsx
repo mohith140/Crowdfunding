@@ -17,7 +17,7 @@ const RestaurantList = () => {
 
     const fetchRestaurants = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/restaurants');
+            const response = await fetch('https://foodapp-0rh9.onrender.com/api/restaurants');
             const data = await response.json();
             setRestaurants(data);
         } catch (error) {
@@ -37,7 +37,7 @@ const RestaurantList = () => {
 
         if (edit) {
             try {
-                await fetch(`http://localhost:5000/api/admin/restaurants/${currentRestaurantId}`, {
+                await fetch(`https://foodapp-0rh9.onrender.com/api/admin/restaurants/${currentRestaurantId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(restaurantData),
@@ -48,7 +48,7 @@ const RestaurantList = () => {
         } else {
             restaurantData.restaurantId = form.id;
             try {
-                await fetch('http://localhost:5000/api/admin/restaurants', {
+                await fetch('https://foodapp-0rh9.onrender.com/api/admin/restaurants', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(restaurantData),
@@ -64,7 +64,7 @@ const RestaurantList = () => {
 
     const handleDelete = async (id) => {
         try {
-            await fetch(`http://localhost:5000/api/admin/restaurants/${id}`, {
+            await fetch(`https://foodapp-0rh9.onrender.com/api/admin/restaurants/${id}`, {
                 method: 'DELETE',
             });
             setRestaurants(restaurants.filter((restaurant) => restaurant.restaurantId !== id));

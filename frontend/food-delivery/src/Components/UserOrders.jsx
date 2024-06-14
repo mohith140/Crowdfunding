@@ -17,7 +17,7 @@ const UserOrders = () => {
 
     const fetchOrders = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/orders');
+            const response = await fetch('https://foodapp-0rh9.onrender.com/api/orders');
             const data = await response.json();
             setOrders(data);
         } catch (error) {
@@ -44,7 +44,7 @@ const UserOrders = () => {
         const orderId = uuidv4();  // Generate a unique order ID using uuid
         const date = new Date();  // Ensure date is in ISO string format
         try {
-            const response = await fetch('http://localhost:5000/api/orders', {
+            const response = await fetch('https://foodapp-0rh9.onrender.com/api/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ const UserOrders = () => {
 
     const handleCancelOrder = async (orderId) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/orders/${orderId}`, {
+            const response = await fetch(`https://foodapp-0rh9.onrender.com/api/orders/${orderId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -23,7 +23,7 @@ function UserRestaurantMenu() {
 
     const fetchName = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/admin/restaurants/${params.id}`);
+            const response = await fetch(`https://foodapp-0rh9.onrender.com/api/admin/restaurants/${params.id}`);
             const data = await response.json();
             setName(data.name);
         } catch (err) {
@@ -33,7 +33,7 @@ function UserRestaurantMenu() {
 
     const fetchMenus = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/restaurants/${params.id}/menu`);
+            const response = await fetch(`https://foodapp-0rh9.onrender.com/api/restaurants/${params.id}/menu`);
             const data = await response.json();
             setMenus(data);
         } catch (error) {
@@ -75,7 +75,7 @@ function UserRestaurantMenu() {
         const orderDate = new Date().toISOString();  // Ensure date is in ISO string format
 
         try {
-            const response = await fetch('http://localhost:5000/api/orders', {
+            const response = await fetch('https://foodapp-0rh9.onrender.com/api/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

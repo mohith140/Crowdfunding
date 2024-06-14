@@ -13,7 +13,7 @@ const Orders = () => {
 
     const fetchOrders = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/admin/orders');
+            const response = await fetch('https://foodapp-0rh9.onrender.com/api/admin/orders');
             const data = await response.json();
             setOrders(data);
         } catch (error) {
@@ -23,7 +23,7 @@ const Orders = () => {
 
     const handleStatus = async (id, status) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/admin/orders/${id}/status`, {
+            const response = await fetch(`https://foodapp-0rh9.onrender.com/api/admin/orders/${id}/status`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
