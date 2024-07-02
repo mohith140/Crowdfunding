@@ -13,13 +13,18 @@ const UserOrders = () => {
 
     useEffect(() => {
         fetchOrders();
-    }, []);
+    }, []); // Add user as a dependency to refetch when user changes
 
     const fetchOrders = async () => {
         try {
             const response = await fetch('https://foodapp-0rh9.onrender.com/api/orders');
             const data = await response.json();
-            setOrders(data);
+
+            // Filter orders to only include those made by the current user
+            const userOrders = data.filter(order => order.userId._id === user._id);
+            console.log(user)
+
+            setOrders(userOrders);
         } catch (error) {
             console.error('Error fetching orders:', error);
         }
@@ -42,7 +47,7 @@ const UserOrders = () => {
 
     const handleReorder = async (order) => {
         const orderId = uuidv4();  // Generate a unique order ID using uuid
-        const date = new Date();  // Ensure date is in ISO string format
+        const date = new Date().toISOString();  // Ensure date is in ISO string format
         try {
             const response = await fetch('https://foodapp-0rh9.onrender.com/api/orders', {
                 method: 'POST',
