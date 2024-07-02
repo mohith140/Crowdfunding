@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, Button, ListGroup, Row, Col, Alert } from 'react-bootstrap';
 import { FaCheckCircle, FaClock, FaTimesCircle } from 'react-icons/fa';
 import './CSS/UserOrders.css';
@@ -11,24 +11,26 @@ const UserOrders = () => {
     const [message, setMessage] = useState(null);
     const { user } = useAuth();
 
-    useEffect(() => {
-        fetchOrders();
-    }, []); // Add user as a dependency to refetch when user changes
-
-    const fetchOrders = async () => {
+    // Define fetchOrders with useCallback to memoize and avoid re-creation on every render
+    const fetchOrders = useCallback(async () => {
         try {
             const response = await fetch('https://foodapp-0rh9.onrender.com/api/orders');
             const data = await response.json();
 
             // Filter orders to only include those made by the current user
             const userOrders = data.filter(order => order.userId._id === user._id);
-            console.log(user)
-
             setOrders(userOrders);
         } catch (error) {
             console.error('Error fetching orders:', error);
         }
-    };
+    }, [user]); // Depend on user to refetch when user changes
+
+    useEffect(() => {
+        // Fetch orders when the component mounts or when the user changes
+        if (user) {
+            fetchOrders();
+        }
+    }, [user, fetchOrders]); // Depend on both user and fetchOrders
 
     const getStatusIcon = (status) => {
         switch (status) {
