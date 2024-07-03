@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import { v4 as uuidv4 } from 'uuid';  // Import uuid library for generating unique order IDs
 import './CSS/UserRestaurantList.css'; // Import custom CSS for navbar styling
 import { useAuth } from './AuthContext';
+import img from '../images/1.jpg';
 
 function UserRestaurantMenu() {
     const [menus, setMenus] = useState([]);
@@ -120,7 +121,7 @@ function UserRestaurantMenu() {
                         <div className="col mb-4" key={menu.itemId}>
                             <div className="card restaurant-card">
                                 <img
-                                    src={menu.image || 'https://via.placeholder.com/300'}
+                                    src={menu.image || img}
                                     className="card-img"
                                     alt={menu.name}
                                 />
